@@ -1,16 +1,24 @@
 ﻿using Application.StudentWeights.Dtos;
 using System;
+using System.Collections.Generic;
 
 namespace Application.StudentWeights.Service
 {
     public interface IStudentWeightsService
     {
         /// <summary>
-        /// Get a student weight by its id
+        /// Get a student's weight by id
         /// </summary>
         /// <param name="studentWeightId">The weight id</param>
         /// <returns>The weight DTO</returns>
         StudentWeightDto Get(Guid studentWeightId);
+
+        /// <summary>
+        /// Get a student weights by its id
+        /// </summary>
+        /// <param name="studentId">The student id</param>
+        /// <returns>List of student weights</returns>
+        IEnumerable<StudentWeightDto> GetList(Guid studentId);
 
         /// <summary>
         /// Create a student weight

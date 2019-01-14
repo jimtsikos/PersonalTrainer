@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Application.Students.Dtos;
 using DomainModel.Students;
 using DomainModel.StudentsImpl;
@@ -21,6 +22,13 @@ namespace Application.Students.Service
             Student student = _studentRepository.FindById(studentId);
 
             return AutoMapper.Mapper.Map<Student, StudentDto>(student);
+        }
+
+        public IEnumerable<StudentDto> GetList()
+        {
+            IEnumerable<Student> students = _studentRepository.FindAll();
+
+            return AutoMapper.Mapper.Map<IEnumerable<Student>, IEnumerable<StudentDto>>(students);
         }
 
         public StudentDto Create(StudentDto studentDto)

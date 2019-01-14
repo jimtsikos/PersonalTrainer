@@ -53,5 +53,39 @@ namespace DomainModel.TrainersImpl
 
             return trainer;
         }
+
+        public Trainer Update(Trainer trainer, string firstname, string lastname, string description, double payRate, bool isActive)
+        {
+            if (trainer == null)
+            {
+                throw new ArgumentNullException("trainer");
+            }
+
+            if (string.IsNullOrEmpty(firstname))
+            {
+                throw new ArgumentNullException("firstname");
+            }
+
+            if (string.IsNullOrEmpty(lastname))
+            {
+                throw new ArgumentNullException("lastname");
+            }
+
+            if (payRate < 0)
+            {
+                throw new Exception("payRate cannot be negative");
+            }
+
+            trainer.FirstName = firstname;
+            trainer.LastName = lastname;
+            trainer.Description = description;
+            trainer.PayRate = payRate;
+            trainer.IsActive = isActive;
+            trainer.UpdatedAt = DateTime.UtcNow;
+
+            DomainEvents.Raise<TrainerUpdated>(new TrainerUpdated() { Trainer = trainer });
+
+            return trainer;
+        }
     }
 }

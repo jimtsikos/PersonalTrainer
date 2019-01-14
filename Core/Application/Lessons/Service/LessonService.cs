@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Application.Lessons.Dtos;
 using DomainModel.Lesson;
 using DomainModel.LessonImpl;
+using DomainModel.LessonImpl.Enum;
 using DomainModel.Students;
 using DomainModel.StudentsImpl;
 using DomainModel.Trainers;
@@ -30,6 +32,32 @@ namespace Application.Lessons.Service
             Lesson lesson = _lessonRepository.FindById(lessonId);
 
             return AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
+        }
+
+        public IEnumerable<LessonDto> GetList()
+        {
+            IEnumerable<Lesson> lessons = _lessonRepository.FindAll();
+
+            return AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
+        }
+
+        public IEnumerable<LessonDto> GetByDate(DateTime dateTime)
+        {
+            IEnumerable<Lesson> lessons = _lessonRepository.FindByDate(dateTime);
+
+            return AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
+        }
+
+        public IEnumerable<LessonDto> GetByDateAndTime(DateTime dateTime, string hour)
+        {
+            if (!Enum.TryParse(hour, out Hour hourParsed))
+            {
+                throw new Exception("hour is not regognised");
+            }
+
+            IEnumerable<Lesson> lessons = _lessonRepository.FindByDateAndTime(dateTime, hourParsed);
+
+            return AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
         }
 
         public LessonDto Create(LessonDto lessonDto)

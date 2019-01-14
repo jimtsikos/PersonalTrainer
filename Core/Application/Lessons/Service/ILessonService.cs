@@ -1,5 +1,6 @@
 ﻿using Application.Lessons.Dtos;
 using System;
+using System.Collections.Generic;
 
 namespace Application.Lessons.Service
 {
@@ -11,6 +12,27 @@ namespace Application.Lessons.Service
         /// <param name="lessonId">The lesson id</param>
         /// <returns>The lesson DTO</returns>
         LessonDto Get(Guid lessonId);
+
+        /// <summary>
+        /// Get a list of all lessons
+        /// </summary>
+        /// <returns>The list of lessons</returns>
+        IEnumerable<LessonDto> GetList();
+
+        /// <summary>
+        /// Get a list of lessons by date
+        /// </summary>
+        /// <param name="dateTime">The datetime to search for</param>
+        /// <returns>The list of lessons for a specific date</returns>
+        IEnumerable<LessonDto> GetByDate(DateTime dateTime);
+
+        /// <summary>
+        /// Get a list of lessons by date and time
+        /// </summary>
+        /// <param name="dateTime">The datetime to search for</param>
+        /// <param name="hour">The hour to search for</param>
+        /// <returns>The list of lessons for a specific date and time</returns>
+        IEnumerable<LessonDto> GetByDateAndTime(DateTime dateTime, string hour);
 
         /// <summary>
         /// Create a lesson

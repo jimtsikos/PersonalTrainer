@@ -17,5 +17,6 @@ namespace DomainModel.Trainers
         ICollection<LessonImpl.Lesson> Lessons { get; }
 
         Trainer Create(string firstname, string lastname, string description, double payRate, bool isActive);
+        Trainer Update(Trainer trainer, string firstname, string lastname, string description, double payRate, bool isActive);
     }
 }

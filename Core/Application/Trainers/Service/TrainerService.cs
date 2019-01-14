@@ -2,6 +2,8 @@
 using DomainModel.TrainersImpl;
 using DomainModel.Trainers;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Application.Trainers.Service
 {
@@ -21,6 +23,13 @@ namespace Application.Trainers.Service
             Trainer trainer = _trainerRepository.FindById(trainerId);
 
             return AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
+        }
+
+        public IEnumerable<TrainerDto> GetList()
+        {
+            IEnumerable<Trainer> trainers = _trainerRepository.FindAll();
+
+            return AutoMapper.Mapper.Map<IEnumerable<Trainer>, IEnumerable<TrainerDto>>(trainers);
         }
 
         public TrainerDto Create(TrainerDto trainerDto)
@@ -45,6 +54,8 @@ namespace Application.Trainers.Service
             {
                 throw new Exception("No such trainer exists");
             }
+
+            trainer = _trainer.Update(trainer, trainerDto.FirstName, trainerDto.LastName, trainerDto.Description, trainerDto.PayRate, trainerDto.IsActive);
 
             _trainerRepository.Update(trainer);
         }

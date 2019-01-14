@@ -45,5 +45,26 @@ namespace DomainModel.StudentWeightsImpl
 
             return studentWeight;
         }
+        
+        public StudentWeight Update(StudentWeight studentWeight, Student student, double weight)
+        {
+            if (studentWeight == null)
+            {
+                throw new ArgumentNullException("studentId cannot be empty");
+            }
+
+            if (weight < 0)
+            {
+                throw new Exception("weight cannot be negative");
+            }
+
+            studentWeight.Student = student;
+            studentWeight.Weight = weight;
+            studentWeight.UpdatedAt = DateTime.UtcNow;
+
+            DomainEvents.Raise<StudentWeightUpdated>(new StudentWeightUpdated() { StudentWeight = studentWeight });
+
+            return studentWeight;
+        }
     }
 }

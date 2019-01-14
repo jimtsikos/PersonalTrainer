@@ -13,5 +13,6 @@ namespace DomainModel.StudentWeights
         DateTime UpdatedAt { get; }
 
         StudentWeight Create(Student student, double weight);
+        StudentWeight Update(StudentWeight studentWeight, Student student, double weight);
     }
 }

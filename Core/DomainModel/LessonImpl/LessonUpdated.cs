@@ -2,7 +2,7 @@
 
 namespace DomainModel.LessonImpl
 {
-    public class LessonCreated : DomainEvent
+    public class LessonUpdated : DomainEvent
     {
         public Lesson Lesson { get; set; }
 
@@ -15,7 +15,6 @@ namespace DomainModel.LessonImpl
             this.Args.Add("Minutes", this.Lesson.Minutes);
             this.Args.Add("IsActive", this.Lesson.IsActive);
             this.Args.Add("IsPaid", this.Lesson.IsPaid);
-            this.Args.Add("CreatedAt", this.Lesson.CreatedAt);
             this.Args.Add("UpdatedAt", this.Lesson.UpdatedAt);
         }
     }

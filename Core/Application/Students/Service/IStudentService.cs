@@ -1,5 +1,6 @@
 ﻿using Application.Students.Dtos;
 using System;
+using System.Collections.Generic;
 
 namespace Application.Students.Service
 {
@@ -11,6 +12,12 @@ namespace Application.Students.Service
         /// <param name="studentId">The student id</param>
         /// <returns>The student DTO</returns>
         StudentDto Get(Guid studentId);
+
+        /// <summary>
+        /// Get studnets list
+        /// </summary>
+        /// <returns>The students list</returns>
+        IEnumerable<StudentDto> GetList();
 
         /// <summary>
         /// Create a student

@@ -64,5 +64,46 @@ namespace DomainModel.StudentsImpl
 
             return student;
         }
+
+        public Student Update(Student student, string firstname, string lastname, string description, double height, double payRate, double prepaidMoney, bool isActive)
+        {
+            if (student == null)
+            {
+                throw new ArgumentNullException("student");
+            }
+
+            if (string.IsNullOrEmpty(firstname))
+            {
+                throw new ArgumentNullException("firstname");
+            }
+
+            if (string.IsNullOrEmpty(lastname))
+            {
+                throw new ArgumentNullException("lastname");
+            }
+
+            if (payRate < 0)
+            {
+                throw new Exception("payRate cannot be negative");
+            }
+
+            if (prepaidMoney < 0)
+            {
+                throw new Exception("prepaidMoney cannot be negative");
+            }
+            
+            student.FirstName = firstname;
+            student.LastName = lastname;
+            student.Description = description;
+            student.Height = height;
+            student.PayRate = payRate;
+            student.PrepaidMoney = prepaidMoney;
+            student.UpdatedAt = DateTime.UtcNow;
+            student.IsActive = isActive;
+
+            DomainEvents.Raise<StudentUpdated>(new StudentUpdated() { Student = student });
+
+            return student;
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Application.StudentWeights.Dtos;
 using DomainModel.Students;
+using DomainModel.StudentsImpl;
 using DomainModel.StudentWeights;
 using DomainModel.StudentWeightsImpl;
 
@@ -24,6 +26,15 @@ namespace Application.StudentWeights.Service
             StudentWeight studentWeight = _studentWeightRepository.FindById(studentWeightId);
 
             return AutoMapper.Mapper.Map<StudentWeight, StudentWeightDto>(studentWeight);
+        }
+
+        public IEnumerable<StudentWeightDto> GetList(Guid studentId)
+        {
+            Student student = _studentRepository.FindById(studentId);
+
+            IEnumerable<StudentWeight> studentWeights = _studentWeightRepository.FindAll(student);
+
+            return AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, IEnumerable<StudentWeightDto>>(studentWeights);
         }
 
         public StudentWeightDto Create(StudentWeightDto studentWeightDto)

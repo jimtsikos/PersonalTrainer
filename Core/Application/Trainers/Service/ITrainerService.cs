@@ -1,5 +1,6 @@
 ﻿using Application.Trainers.Dtos;
 using System;
+using System.Collections.Generic;
 
 namespace Application.Trainers.Service
 {
@@ -11,6 +12,12 @@ namespace Application.Trainers.Service
         /// <param name="trainerId">The trainer id</param>
         /// <returns>The trainer DTO</returns>
         TrainerDto Get(Guid trainerId);
+
+        /// <summary>
+        /// Get a list of trainers
+        /// </summary>
+        /// <returns>A list of trainer DTO</returns>
+        IEnumerable<TrainerDto> GetList();
 
         /// <summary>
         /// Create a trainer

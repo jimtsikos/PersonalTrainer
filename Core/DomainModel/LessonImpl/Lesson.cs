@@ -74,6 +74,42 @@ namespace DomainModel.LessonImpl
             return lesson;
         }
 
+        public Lesson Update(Lesson lesson, Student student, Trainer trainer, DateTime dateTime, string hour, string minutes, bool isActive, bool isPaid)
+        {
+            if (student == null)
+            {
+                throw new ArgumentNullException("student");
+            }
+
+            if (trainer == null)
+            {
+                throw new ArgumentNullException("trainer");
+            }
+
+            if (!System.Enum.TryParse(hour, out Hour hourParsed))
+            {
+                throw new Exception("hour is not regognised");
+            }
+
+            if (!System.Enum.TryParse(minutes, out Minutes minutesParsed))
+            {
+                throw new Exception("minutes is not regognised");
+            }
+
+            lesson.Student = student;
+            lesson.Trainer = trainer;
+            lesson.DateTime = dateTime;
+            lesson.Hour = hourParsed;
+            lesson.Minutes = minutesParsed;
+            lesson.IsActive = isActive;
+            lesson.IsPaid = isPaid;
+            lesson.UpdatedAt = DateTime.UtcNow;
+
+            DomainEvents.Raise<LessonUpdated>(new LessonUpdated() { Lesson = lesson });
+
+            return lesson;
+        }
+
         public bool HasDublicateLesson(Student student, DateTime dateTime, string hour, string minutes)
         {
             bool hasDublicateLesson = false;
