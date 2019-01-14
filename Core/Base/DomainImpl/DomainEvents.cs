@@ -1,7 +1,7 @@
 ﻿using Base.Domain;
-using Castle.Windsor;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Base.DomainImpl
 {
@@ -9,19 +9,20 @@ namespace Base.DomainImpl
     {
         [ThreadStatic] //so that each thread has its own callbacks
         private static List<Delegate> actions;
+        private static IServiceCollection _services;
 
-        private static IWindsorContainer Container;
-
-        public static void Init(IWindsorContainer container)
+        public static void Init(IServiceCollection services)
         {
-            Container = container;
+            _services = services;
         }
 
         //Registers a callback for the given domain event, used for testing only
         public static void Register<T>(Action<T> callback) where T : DomainEvent
         {
             if (actions == null)
+            {
                 actions = new List<Delegate>();
+            }
 
             actions.Add(callback);
         }
@@ -35,14 +36,24 @@ namespace Base.DomainImpl
         //Raises the given domain event
         public static void Raise<T>(T args) where T : DomainEvent
         {
-            if (Container != null)
-                foreach (var handler in Container.ResolveAll<IHandles<T>>())
-                    handler.Handle(args);
+            if (_services != null)
+            {
+                _services.AddScoped<IHandles<T>, DomainEventHandle<T>>();
+                ServiceProvider serviceProvider = _services.BuildServiceProvider();
+                IHandles<T> handler = serviceProvider.GetService<IHandles<T>>();
+                handler.Handle(args);
+            }
 
             if (actions != null)
+            {
                 foreach (var action in actions)
+                {
                     if (action is Action<T>)
+                    {
                         ((Action<T>)action)(args);
+                    }
+                }
+            } 
         }
     }
 }
