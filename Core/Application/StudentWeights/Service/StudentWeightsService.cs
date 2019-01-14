@@ -2,6 +2,7 @@
 using Application.StudentWeights.Dtos;
 using Base.Repository;
 using Base.Specification;
+using DomainModel.Students;
 using DomainModel.StudentWeights;
 using DomainModel.StudentWeightsImpl;
 
@@ -11,12 +12,14 @@ namespace Application.StudentWeights.Service
     {
         private readonly IStudentWeight _studentWeight;
         private readonly IStudentWeightRepository _studentWeightRepository;
+        private readonly IStudentRepository _studentRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public StudentWeightsService(IStudentWeight studentWeight, IStudentWeightRepository studentWeightRepository, IUnitOfWork unitOfWork)
+        public StudentWeightsService(IStudentWeight studentWeight, IStudentWeightRepository studentWeightRepository, IStudentRepository studentRepository,  IUnitOfWork unitOfWork)
         {
             _studentWeight = studentWeight;
             _studentWeightRepository = studentWeightRepository;
+            _studentRepository = studentRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -31,7 +34,7 @@ namespace Application.StudentWeights.Service
 
         public StudentWeightDto Create(StudentWeightDto studentWeightDto)
         {
-            StudentWeight studentWeight = _studentWeight.Create(studentWeightDto.StudentId, studentWeightDto.Weight);
+            StudentWeight studentWeight = _studentWeight.Create(_studentRepository.FindById(studentWeightDto.StudentId), studentWeightDto.Weight);
 
             _studentWeightRepository.Create(studentWeight);
             _unitOfWork.Commit();

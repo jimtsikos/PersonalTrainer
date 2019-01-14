@@ -1,5 +1,7 @@
 ﻿using DomainModel.StudentsImpl;
+using DomainModel.StudentWeightsImpl;
 using System;
+using System.Collections.Generic;
 
 namespace DomainModel.Students
 {
@@ -15,7 +17,7 @@ namespace DomainModel.Students
         DateTime CreatedAt { get; }
         DateTime UpdatedAt { get; }
         bool IsActive { get; }
-        //TODO: ICollection<StudentWeight> StudentWeights { get; set; }
+        ICollection<StudentWeight> StudentWeights { get; }
         //TODO: ICollection<Lesson> Lessons { get; set; }
 
         Student Create(string firstname, string lastname, string description, double height, double payRate, double prepaidMoney, bool isActive);

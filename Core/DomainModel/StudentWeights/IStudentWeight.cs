@@ -1,4 +1,5 @@
-﻿using DomainModel.StudentWeightsImpl;
+﻿using DomainModel.StudentsImpl;
+using DomainModel.StudentWeightsImpl;
 using System;
 
 namespace DomainModel.StudentWeights
@@ -6,11 +7,11 @@ namespace DomainModel.StudentWeights
     public interface IStudentWeight
     {
         Guid Id { get; }
-        Guid StudentId { get; }
+        Student Student { get; }
         double Weight { get; }
         DateTime CreatedAt { get; }
         DateTime UpdatedAt { get; }
 
-        StudentWeight Create(Guid studentId, double weight);
+        StudentWeight Create(Student student, double weight);
     }
 }

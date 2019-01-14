@@ -1,5 +1,6 @@
 ﻿using Base.Domain;
 using Base.DomainImpl;
+using DomainModel.StudentsImpl;
 using DomainModel.StudentWeights;
 using System;
 
@@ -9,7 +10,7 @@ namespace DomainModel.StudentWeightsImpl
     {
         public Guid Id { get; protected set; }
 
-        public Guid StudentId { get; protected set; }
+        public Student Student { get; protected set; }
 
         public double Weight { get; protected set; }
 
@@ -17,9 +18,9 @@ namespace DomainModel.StudentWeightsImpl
 
         public DateTime UpdatedAt { get; protected set; }
 
-        public StudentWeight Create(Guid studentId, double weight)
+        public StudentWeight Create(Student student, double weight)
         {
-            if (studentId != Guid.Empty)
+            if (student != null)
             {
                 throw new ArgumentNullException("studentId cannot be empty");
             }
@@ -32,7 +33,7 @@ namespace DomainModel.StudentWeightsImpl
             StudentWeight studentWeight = new StudentWeight()
             {
                 Id = Guid.NewGuid(),
-                StudentId = studentId,
+                Student = student,
                 Weight = weight,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
