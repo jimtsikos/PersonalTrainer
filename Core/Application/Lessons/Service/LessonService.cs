@@ -1,7 +1,5 @@
 ﻿using System;
 using Application.Lessons.Dtos;
-using Base.Repository;
-using Base.Specification;
 using DomainModel.Lesson;
 using DomainModel.LessonImpl;
 using DomainModel.Students;
@@ -17,24 +15,19 @@ namespace Application.Lessons.Service
         private readonly ILessonRepository _lessonRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ITrainerRepository _trainerRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public LessonService(ILesson lesson, ILessonRepository lessonRepository, 
-                             IStudentRepository studentRepository, ITrainerRepository trainerRepository,
-                             IUnitOfWork unitOfWork)
+                             IStudentRepository studentRepository, ITrainerRepository trainerRepository)
         {
             _lesson = lesson;
             _lessonRepository = lessonRepository;
             _studentRepository = studentRepository;
             _trainerRepository = trainerRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public LessonDto Get(Guid lessonId)
         {
-            ISpecification<Lesson> registeredSpec = new LessonRegisteredSpec(lessonId);
-
-            Lesson lesson = _lessonRepository.FindOne(registeredSpec);
+            Lesson lesson = _lessonRepository.FindById(lessonId);
 
             return AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
         }
@@ -55,7 +48,6 @@ namespace Application.Lessons.Service
             }
 
             _lessonRepository.Create(lesson);
-            _unitOfWork.Commit();
 
             return AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
         }
@@ -67,9 +59,7 @@ namespace Application.Lessons.Service
                 throw new Exception("Id can't be empty");
             }
 
-            ISpecification<Lesson> registeredSpec = new LessonRegisteredSpec(lessonDto.Id);
-
-            Lesson lesson = _lessonRepository.FindOne(registeredSpec);
+            Lesson lesson = _lessonRepository.FindById(lessonDto.Id);
 
             if (lesson == null)
             {
@@ -77,20 +67,16 @@ namespace Application.Lessons.Service
             }
 
             _lessonRepository.Update(lesson);
-            _unitOfWork.Commit();
         }
 
         public void Delete(Guid lessonId)
         {
-            ISpecification<Lesson> registeredSpec = new LessonRegisteredSpec(lessonId);
-
-            Lesson lesson = _lessonRepository.FindOne(registeredSpec);
+            Lesson lesson = _lessonRepository.FindById(lessonId);
 
             if (lesson == null)
                 throw new Exception("No such lesson exists");
 
             _lessonRepository.Delete(lesson);
-            _unitOfWork.Commit();
         }
     }
 }

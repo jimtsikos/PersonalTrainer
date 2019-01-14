@@ -1,7 +1,6 @@
-﻿using Base.Specification;
+﻿using DAL.DAL;
 using DomainModel.Trainers;
 using DomainModel.TrainersImpl;
-using Infrastructure.Base;
 using System;
 using System.Collections.Generic;
 
@@ -9,41 +8,36 @@ namespace Infrastructure.Trainers
 {
     public class TrainerRepository : ITrainerRepository
     {
-        private readonly Repository<Trainer> _repository;
+        private readonly ITrainersContext _context;
 
-        public TrainerRepository(Repository<Trainer> repository)
+        public TrainerRepository(ITrainersContext context)
         {
-            _repository = repository;
+            _context = context;
         }
 
         public Trainer FindById(Guid id)
         {
-            return _repository.FindById(id);
+            return _context.Trainers.Find(id);
         }
 
-        public Trainer FindOne(ISpecification<Trainer> spec)
+        public IEnumerable<Trainer> FindAll()
         {
-            return _repository.FindOne(spec);
-        }
-
-        public IEnumerable<Trainer> Find(ISpecification<Trainer> spec)
-        {
-            return _repository.Find(spec);
+            return _context.Trainers;
         }
 
         public void Create(Trainer entity)
         {
-            _repository.Create(entity);
+            _context.Trainers.Add(entity);
         }
 
         public void Update(Trainer entity)
         {
-            _repository.Update(entity);
+            _context.Trainers.Update(entity);
         }
 
         public void Delete(Trainer entity)
         {
-            _repository.Delete(entity);
+            _context.Trainers.Remove(entity);
         }
     }
 }

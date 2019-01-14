@@ -1,7 +1,5 @@
 ﻿using System;
 using Application.Students.Dtos;
-using Base.Repository;
-using Base.Specification;
 using DomainModel.Students;
 using DomainModel.StudentsImpl;
 
@@ -11,20 +9,16 @@ namespace Application.Students.Service
     {
         private readonly IStudent _student;
         private readonly IStudentRepository _studentRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public StudentService(IStudent student, IStudentRepository studentRepository, IUnitOfWork unitOfWork)
+        public StudentService(IStudent student, IStudentRepository studentRepository)
         {
             _student = student;
             _studentRepository = studentRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public StudentDto Get(Guid studentId)
         {
-            ISpecification<Student> registeredSpec = new StudentRegisteredSpec(studentId);
-
-            Student student = _studentRepository.FindOne(registeredSpec);
+            Student student = _studentRepository.FindById(studentId);
 
             return AutoMapper.Mapper.Map<Student, StudentDto>(student);
         }
@@ -34,7 +28,6 @@ namespace Application.Students.Service
             Student student = _student.Create(studentDto.FirstName, studentDto.LastName, studentDto.Description, studentDto.Height, studentDto.PayRate, studentDto.PrepaidMoney, studentDto.IsActive);
 
             _studentRepository.Create(student);
-            _unitOfWork.Commit();
 
             return AutoMapper.Mapper.Map<Student, StudentDto>(student);
         }
@@ -46,9 +39,7 @@ namespace Application.Students.Service
                 throw new Exception("Id can't be empty");
             }
 
-            ISpecification<Student> registeredSpec = new StudentRegisteredSpec(studentDto.Id);
-
-            Student student = _studentRepository.FindOne(registeredSpec);
+            Student student = _studentRepository.FindById(studentDto.Id);
 
             if (student == null)
             {
@@ -56,20 +47,16 @@ namespace Application.Students.Service
             }
 
             _studentRepository.Update(student);
-            _unitOfWork.Commit();
         }
 
         public void Delete(Guid studentId)
         {
-            ISpecification<Student> registeredSpec = new StudentRegisteredSpec(studentId);
-
-            Student student = _studentRepository.FindOne(registeredSpec);
+            Student student = _studentRepository.FindById(studentId);
 
             if (student == null)
                 throw new Exception("No such student exists");
 
             _studentRepository.Delete(student);
-            _unitOfWork.Commit();
         }
     }
 }

@@ -1,49 +1,45 @@
-﻿using Base.Specification;
+﻿using DAL.DAL;
+using DomainModel.StudentsImpl;
 using DomainModel.StudentWeights;
 using DomainModel.StudentWeightsImpl;
-using Infrastructure.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Infrastructure.Trainers
 {
     public class StudentWeightRepository : IStudentWeightRepository
     {
-        private readonly Repository<StudentWeight> _repository;
+        private readonly ITrainersContext _context;
 
-        public StudentWeightRepository(Repository<StudentWeight> repository)
+        public StudentWeightRepository(ITrainersContext context)
         {
-            _repository = repository;
+            _context = context;
         }
 
         public StudentWeight FindById(Guid id)
         {
-            return _repository.FindById(id);
+            return _context.StudentWeights.Find(id);
         }
 
-        public StudentWeight FindOne(ISpecification<StudentWeight> spec)
+        public IEnumerable<StudentWeight> FindAll(Student student)
         {
-            return _repository.FindOne(spec);
-        }
-
-        public IEnumerable<StudentWeight> Find(ISpecification<StudentWeight> spec)
-        {
-            return _repository.Find(spec);
+            return _context.StudentWeights.Select(x => x).Where(x => x.Student == student);
         }
 
         public void Create(StudentWeight entity)
         {
-            _repository.Create(entity);
+            _context.StudentWeights.Add(entity);
         }
 
         public void Update(StudentWeight entity)
         {
-            _repository.Update(entity);
+            _context.StudentWeights.Update(entity);
         }
 
         public void Delete(StudentWeight entity)
         {
-            _repository.Delete(entity);
+            _context.StudentWeights.Remove(entity);
         }
     }
 }

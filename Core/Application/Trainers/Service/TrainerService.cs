@@ -1,6 +1,4 @@
 ﻿using Application.Trainers.Dtos;
-using Base.Repository;
-using Base.Specification;
 using DomainModel.TrainersImpl;
 using DomainModel.Trainers;
 using System;
@@ -11,20 +9,16 @@ namespace Application.Trainers.Service
     {
         private readonly ITrainer _trainer;
         private readonly ITrainerRepository _trainerRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public TrainerService(ITrainer trainer, ITrainerRepository trainerRepository, IUnitOfWork unitOfWork)
+        public TrainerService(ITrainer trainer, ITrainerRepository trainerRepository)
         {
             _trainer = trainer;
             _trainerRepository = trainerRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public TrainerDto Get(Guid trainerId)
         {
-            ISpecification<Trainer> registeredSpec = new TrainerRegisteredSpec(trainerId);
-
-            Trainer trainer = _trainerRepository.FindOne(registeredSpec);
+            Trainer trainer = _trainerRepository.FindById(trainerId);
 
             return AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
         }
@@ -34,7 +28,6 @@ namespace Application.Trainers.Service
             Trainer trainer = _trainer.Create(trainerDto.FirstName, trainerDto.LastName, trainerDto.Description, trainerDto.PayRate, trainerDto.IsActive);
 
             _trainerRepository.Create(trainer);
-            _unitOfWork.Commit();
 
             return AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
         }
@@ -46,9 +39,7 @@ namespace Application.Trainers.Service
                 throw new Exception("Id can't be empty");
             }
 
-            ISpecification<Trainer> registeredSpec = new TrainerRegisteredSpec(trainerDto.Id);
-
-            Trainer trainer = _trainerRepository.FindOne(registeredSpec);
+            Trainer trainer = _trainerRepository.FindById(trainerDto.Id);
 
             if (trainer == null)
             {
@@ -56,20 +47,16 @@ namespace Application.Trainers.Service
             }
 
             _trainerRepository.Update(trainer);
-            _unitOfWork.Commit();
         }
 
         public void Delete(Guid trainerId)
         {
-            ISpecification<Trainer> registeredSpec = new TrainerRegisteredSpec(trainerId);
-
-            Trainer trainer = _trainerRepository.FindOne(registeredSpec);
+            Trainer trainer = _trainerRepository.FindById(trainerId);
 
             if (trainer == null)
                 throw new Exception("No such trainer exists");
 
             _trainerRepository.Delete(trainer);
-            _unitOfWork.Commit();
         }
     }
 }

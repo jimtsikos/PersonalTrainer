@@ -1,49 +1,49 @@
-﻿using Base.Specification;
+﻿using DAL.DAL;
 using DomainModel.Lesson;
 using DomainModel.LessonImpl;
-using Infrastructure.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Infrastructure.Trainers
 {
     public class LessonRepository : ILessonRepository
     {
-        private readonly Repository<Lesson> _repository;
+        private readonly ITrainersContext _context;
 
-        public LessonRepository(Repository<Lesson> repository)
+        public LessonRepository(ITrainersContext context)
         {
-            _repository = repository;
+            _context = context;
         }
 
         public Lesson FindById(Guid id)
         {
-            return _repository.FindById(id);
+            return _context.Lessons.Find(id);
         }
 
-        public Lesson FindOne(ISpecification<Lesson> spec)
+        public IEnumerable<Lesson> FindByDate(DateTime dateTime)
         {
-            return _repository.FindOne(spec);
+            return _context.Lessons.Select(x => x).Where(x => x.DateTime.Date.Day == dateTime.Date.Day);
         }
 
-        public IEnumerable<Lesson> Find(ISpecification<Lesson> spec)
+        public IEnumerable<Lesson> FindAll()
         {
-            return _repository.Find(spec);
+            return _context.Lessons;
         }
 
         public void Create(Lesson entity)
         {
-            _repository.Create(entity);
+            _context.Lessons.Add(entity);
         }
 
         public void Update(Lesson entity)
         {
-            _repository.Update(entity);
+            _context.Lessons.Update(entity);
         }
 
         public void Delete(Lesson entity)
         {
-            _repository.Delete(entity);
+            _context.Lessons.Remove(entity);
         }
     }
 }

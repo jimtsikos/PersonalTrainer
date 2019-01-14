@@ -1,7 +1,6 @@
-﻿using Base.Specification;
+﻿using DAL.DAL;
 using DomainModel.Students;
 using DomainModel.StudentsImpl;
-using Infrastructure.Base;
 using System;
 using System.Collections.Generic;
 
@@ -9,41 +8,36 @@ namespace Infrastructure.Trainers
 {
     public class StudentRepository : IStudentRepository
     {
-        private readonly Repository<Student> _repository;
+        private readonly ITrainersContext _context;
 
-        public StudentRepository(Repository<Student> repository)
+        public StudentRepository(ITrainersContext context)
         {
-            _repository = repository;
+            _context = context;
         }
 
         public Student FindById(Guid id)
         {
-            return _repository.FindById(id);
+            return _context.Students.Find(id);
         }
 
-        public Student FindOne(ISpecification<Student> spec)
+        public IEnumerable<Student> FindAll()
         {
-            return _repository.FindOne(spec);
-        }
-
-        public IEnumerable<Student> Find(ISpecification<Student> spec)
-        {
-            return _repository.Find(spec);
+            return _context.Students;
         }
 
         public void Create(Student entity)
         {
-            _repository.Create(entity);
+            _context.Students.Add(entity);
         }
 
         public void Update(Student entity)
         {
-            _repository.Update(entity);
+            _context.Students.Update(entity);
         }
 
         public void Delete(Student entity)
         {
-            _repository.Delete(entity);
+            _context.Students.Remove(entity);
         }
     }
 }
