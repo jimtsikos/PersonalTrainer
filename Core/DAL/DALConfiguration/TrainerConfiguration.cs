@@ -16,7 +16,7 @@ namespace DAL.DALConfiguration
             builder.Property(x => x.UpdatedAt).IsRequired();
             builder.Property(x => x.IsActive).IsRequired();
 
-            //TODO: builder.HasMany(x => x.Lessons).WithOne();
+            builder.HasMany(x => x.Lessons).WithOne();
         }
     }
 }

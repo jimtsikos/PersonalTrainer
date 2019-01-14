@@ -4,9 +4,11 @@ using DomainModel.Students;
 using DomainModel.StudentWeightsImpl;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainModel.StudentsImpl
 {
+    [Table("Students")]
     public class Student : IAggregateRoot, IStudent
     {
         public Guid Id { get; protected set; }
@@ -20,6 +22,7 @@ namespace DomainModel.StudentsImpl
         public DateTime UpdatedAt { get; protected set; }
         public bool IsActive { get; protected set; }
         public ICollection<StudentWeight> StudentWeights { get; protected set; }
+        public ICollection<LessonImpl.Lesson> Lessons { get; protected set; }
 
         public Student Create(string firstname, string lastname, string description, double height, double payRate, double prepaidMoney, bool isActive)
         {

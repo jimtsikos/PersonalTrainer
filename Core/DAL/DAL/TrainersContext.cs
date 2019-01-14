@@ -1,4 +1,5 @@
 ﻿using DAL.DALConfiguration;
+using DomainModel.LessonImpl;
 using DomainModel.StudentsImpl;
 using DomainModel.StudentWeightsImpl;
 using DomainModel.TrainersImpl;
@@ -11,7 +12,7 @@ namespace DAL.DAL
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<StudentWeight> StudentWeights { get; set; }
-        //TODO: public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
 
         public TrainersContext(DbContextOptions<TrainersContext> options) : base(options)
         {
@@ -22,7 +23,7 @@ namespace DAL.DAL
             modelBuilder.ApplyConfiguration(new TrainerConfiguration());
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
             modelBuilder.ApplyConfiguration(new StudentWeightConfiguration());
-            //TODO: modelBuilder.ApplyConfiguration(new LessonConfiguration());
+            modelBuilder.ApplyConfiguration(new LessonConfiguration());
         }
     }
 }

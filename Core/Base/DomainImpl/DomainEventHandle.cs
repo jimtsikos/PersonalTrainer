@@ -21,7 +21,7 @@ namespace Base.DomainImpl
         {
             @event.Flatten();
             @event.CorrelationID = this.requestCorrelationIdentifier.CorrelationID;
-            this.domainEventRepository.Add(@event);
+            this.domainEventRepository.Create(@event);
         }
     }
 }

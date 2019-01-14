@@ -1,0 +1,29 @@
+﻿namespace DomainModel.LessonImpl.Enum
+{
+    public enum Hour
+    {
+        Zero,
+        One,
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight,
+        Nine,
+        Ten,
+        Eleven,
+        Twelve,
+        Thirteen,
+        Fourteen,
+        Fifteen,
+        Sixteen,
+        Seventeen,
+        Nineteen,
+        Twenty,
+        TwentyOne,
+        TwentyTwo,
+        TwentyThree
+    }
+}

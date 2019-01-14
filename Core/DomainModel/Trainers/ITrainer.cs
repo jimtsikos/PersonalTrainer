@@ -1,5 +1,6 @@
 ﻿using DomainModel.TrainersImpl;
 using System;
+using System.Collections.Generic;
 
 namespace DomainModel.Trainers
 {
@@ -13,7 +14,7 @@ namespace DomainModel.Trainers
         DateTime CreatedAt { get; }
         DateTime UpdatedAt { get; }
         bool IsActive { get; }
-        //TODO: ICollection<Lesson> Lessons { get; set; }
+        ICollection<LessonImpl.Lesson> Lessons { get; }
 
         Trainer Create(string firstname, string lastname, string description, double payRate, bool isActive);
     }

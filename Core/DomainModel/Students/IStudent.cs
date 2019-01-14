@@ -18,7 +18,7 @@ namespace DomainModel.Students
         DateTime UpdatedAt { get; }
         bool IsActive { get; }
         ICollection<StudentWeight> StudentWeights { get; }
-        //TODO: ICollection<Lesson> Lessons { get; set; }
+        ICollection<LessonImpl.Lesson> Lessons { get; }
 
         Student Create(string firstname, string lastname, string description, double height, double payRate, double prepaidMoney, bool isActive);
     }

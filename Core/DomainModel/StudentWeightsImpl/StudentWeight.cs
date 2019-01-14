@@ -3,9 +3,11 @@ using Base.DomainImpl;
 using DomainModel.StudentsImpl;
 using DomainModel.StudentWeights;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainModel.StudentWeightsImpl
 {
+    [Table("StudentWeights")]
     public class StudentWeight : IAggregateRoot, IStudentWeight
     {
         public Guid Id { get; protected set; }
@@ -20,7 +22,7 @@ namespace DomainModel.StudentWeightsImpl
 
         public StudentWeight Create(Student student, double weight)
         {
-            if (student != null)
+            if (student == null)
             {
                 throw new ArgumentNullException("studentId cannot be empty");
             }

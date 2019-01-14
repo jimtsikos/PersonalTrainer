@@ -1,4 +1,5 @@
-﻿using DomainModel.StudentWeightsImpl;
+﻿using Application.Lessons.Dtos;
+using Application.StudentWeights.Dtos;
 using System;
 using System.Collections.Generic;
 
@@ -20,14 +21,14 @@ namespace Application.Students.Dtos
 
         public double PrepaidMoney { get; set; }
 
+        public bool IsActive { get; set; }
+
+        public ICollection<StudentWeightDto> StudentWeights { get; set; }
+
+        public ICollection<LessonDto> Lessons { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public ICollection<StudentWeight> StudentWeights { get; set; }
-
-        //public ICollection<Lesson> Lessons { get; set; }
     }
 }

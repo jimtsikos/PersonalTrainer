@@ -17,7 +17,7 @@ namespace DomainModel.StudentsImpl
         {
             get
             {
-                return trainer => trainer.Id == _id;
+                return student => student.Id == _id;
             }
         }
     }

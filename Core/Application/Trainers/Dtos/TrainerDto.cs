@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Application.Lessons.Dtos;
+using System;
+using System.Collections.Generic;
 
 namespace Application.Trainers.Dtos
 {
@@ -20,6 +22,6 @@ namespace Application.Trainers.Dtos
 
         public bool IsActive { get; set; }
 
-        //public ICollection<Lesson> Lessons { get; set; }
+        public ICollection<LessonDto> Lessons { get; set; }
     }
 }

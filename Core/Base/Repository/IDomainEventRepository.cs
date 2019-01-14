@@ -6,7 +6,7 @@ namespace Base.Repository
 {
     public interface IDomainEventRepository
     {
-        void Add<TDomainEvent>(TDomainEvent domainEvent) where TDomainEvent : DomainEvent;
+        void Create<TDomainEvent>(TDomainEvent domainEvent) where TDomainEvent : DomainEvent;
         IEnumerable<DomainEventRecord> FindAll();
     }
 }
