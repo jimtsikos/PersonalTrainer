@@ -39,17 +39,17 @@ namespace Infrastructure.Trainers
 
         public void Create(Lesson entity)
         {
-            _context.Lessons.Add(entity);
+            _context.Lessons.Add(entity).Context.SaveChanges();
         }
 
         public void Update(Lesson entity)
         {
-            _context.Lessons.Update(entity);
+            _context.Lessons.Update(entity).Context.SaveChanges();
         }
 
         public void Delete(Lesson entity)
         {
-            _context.Lessons.Remove(entity);
+            _context.Lessons.Remove(entity).Context.SaveChanges();
         }
     }
 }

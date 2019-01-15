@@ -29,17 +29,17 @@ namespace Infrastructure.Trainers
 
         public void Create(StudentWeight entity)
         {
-            _context.StudentWeights.Add(entity);
+            _context.StudentWeights.Add(entity).Context.SaveChanges();
         }
 
         public void Update(StudentWeight entity)
         {
-            _context.StudentWeights.Update(entity);
+            _context.StudentWeights.Update(entity).Context.SaveChanges();
         }
 
         public void Delete(StudentWeight entity)
         {
-            _context.StudentWeights.Remove(entity);
+            _context.StudentWeights.Remove(entity).Context.SaveChanges();
         }
     }
 }

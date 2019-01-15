@@ -27,17 +27,17 @@ namespace Infrastructure.Trainers
 
         public void Create(Trainer entity)
         {
-            _context.Trainers.Add(entity);
+            _context.Trainers.Add(entity).Context.SaveChanges();
         }
 
         public void Update(Trainer entity)
         {
-            _context.Trainers.Update(entity);
+            _context.Trainers.Update(entity).Context.SaveChanges();
         }
 
         public void Delete(Trainer entity)
         {
-            _context.Trainers.Remove(entity);
+            _context.Trainers.Remove(entity).Context.SaveChanges();
         }
     }
 }
