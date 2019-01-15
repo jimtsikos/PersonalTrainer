@@ -8,7 +8,9 @@ namespace DomainModel.Lesson
     public interface ILesson
     {
         Guid Id { get; }
+        Guid StudentId { get; }
         Student Student { get; }
+        Guid TrainerId { get; }
         Trainer Trainer { get; }
         DateTime DateTime { get; }
         Hour Hour { get; }

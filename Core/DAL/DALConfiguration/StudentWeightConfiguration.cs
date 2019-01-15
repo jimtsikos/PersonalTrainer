@@ -12,7 +12,11 @@ namespace DAL.DALConfiguration
             builder.Property(x => x.Weight).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.UpdatedAt).IsRequired();
-            builder.HasOne(x => x.Student).WithMany();
+            builder.HasOne(x => x.Student)
+                   .WithMany(x => x.StudentWeights)
+                   .HasForeignKey(x => x.StudentId)
+                   .IsRequired()
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

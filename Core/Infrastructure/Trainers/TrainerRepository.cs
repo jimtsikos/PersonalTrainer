@@ -1,8 +1,10 @@
 ﻿using DAL.DAL;
 using DomainModel.Trainers;
 using DomainModel.TrainersImpl;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Infrastructure.Trainers
 {
@@ -17,12 +19,14 @@ namespace Infrastructure.Trainers
 
         public Trainer FindById(Guid id)
         {
-            return _context.Trainers.Find(id);
+            return _context.Trainers.Include(x => x.Lessons)
+                                    .Where(x => x.Id == id)
+                                    .FirstOrDefault();
         }
 
         public IEnumerable<Trainer> FindAll()
         {
-            return _context.Trainers;
+            return _context.Trainers.Include(x => x.Lessons);
         }
 
         public void Create(Trainer entity)

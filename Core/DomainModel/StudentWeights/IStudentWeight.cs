@@ -7,6 +7,7 @@ namespace DomainModel.StudentWeights
     public interface IStudentWeight
     {
         Guid Id { get; }
+        Guid StudentId { get; }
         Student Student { get; }
         double Weight { get; }
         DateTime CreatedAt { get; }

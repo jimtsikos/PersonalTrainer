@@ -13,25 +13,18 @@ namespace DomainModel.LessonImpl
     [Table("Lesson")]
     public class Lesson : IAggregateRoot, ILesson
     {
-        public Guid Id { get; protected set; }
-
-        public Student Student { get; protected set; }
-
-        public Trainer Trainer { get; protected set; }
-
-        public DateTime DateTime { get; protected set; }
-
-        public Hour Hour { get; protected set; }
-
-        public Minutes Minutes { get; protected set; }
-
-        public bool IsActive { get; protected set; }
-
-        public bool IsPaid { get; protected set; }
-
-        public DateTime CreatedAt { get; protected set; }
-
-        public DateTime UpdatedAt { get; protected set; }
+        public virtual Guid Id { get; protected set; }
+        public virtual Guid StudentId { get; protected set; }
+        public virtual Student Student { get; protected set; }
+        public virtual Guid TrainerId { get; protected set; }
+        public virtual Trainer Trainer { get; protected set; }
+        public virtual DateTime DateTime { get; protected set; }
+        public virtual Hour Hour { get; protected set; }
+        public virtual Minutes Minutes { get; protected set; }
+        public virtual bool IsActive { get; protected set; }
+        public virtual bool IsPaid { get; protected set; }
+        public virtual DateTime CreatedAt { get; protected set; }
+        public virtual DateTime UpdatedAt { get; protected set; }
 
         public Lesson Create(Student student, Trainer trainer, DateTime dateTime, string hour, string minutes, bool isActive, bool isPaid)
         {

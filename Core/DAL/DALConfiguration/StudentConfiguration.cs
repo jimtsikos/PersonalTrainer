@@ -17,9 +17,6 @@ namespace DAL.DALConfiguration
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.UpdatedAt).IsRequired();
             builder.Property(x => x.IsActive).IsRequired();
-
-            builder.HasMany(x => x.StudentWeights).WithOne();
-            //builder.HasMany(x => x.Lessons);
         }
     }
 }

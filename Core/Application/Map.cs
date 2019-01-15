@@ -17,8 +17,15 @@ namespace Application
             Mapper.Initialize(x => 
             {
                 x.CreateMap<Trainer, TrainerDto>();
-                x.CreateMap<Student, StudentDto>();
-                x.CreateMap<StudentWeight, StudentWeightDto>();
+
+                x.CreateMap<Student, StudentDto>().ForMember(
+                    dest => dest.StudentWeights,
+                    opt => opt.MapFrom(src => src.StudentWeights));
+
+                x.CreateMap<StudentWeight, StudentWeightDto>().ForMember(
+                    dest => dest.StudentId,
+                    opt => opt.MapFrom(src => src.Student.Id));
+
                 x.CreateMap<Lesson, LessonDto>();
             });
         }

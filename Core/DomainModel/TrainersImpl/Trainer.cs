@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainModel.TrainersImpl
 {
-    [Table("Trainers")]
     public class Trainer : IAggregateRoot, ITrainer
     {
         public virtual Guid Id { get; protected set; }
@@ -18,7 +17,8 @@ namespace DomainModel.TrainersImpl
         public virtual DateTime CreatedAt { get; protected set; }
         public virtual DateTime UpdatedAt { get; protected set; }
         public virtual bool IsActive { get; protected set; }
-        public ICollection<LessonImpl.Lesson> Lessons { get; protected set; }
+
+        public virtual ICollection<LessonImpl.Lesson> Lessons { get; protected set; }
 
         public Trainer Create(string firstname, string lastname, string description, double payRate, bool isActive)
         {

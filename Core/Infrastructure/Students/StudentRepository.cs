@@ -1,8 +1,10 @@
 ﻿using DAL.DAL;
 using DomainModel.Students;
 using DomainModel.StudentsImpl;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Infrastructure.Trainers
 {
@@ -17,12 +19,15 @@ namespace Infrastructure.Trainers
 
         public Student FindById(Guid id)
         {
-            return _context.Students.Find(id);
+            return _context.Students
+                           .Include(x => x.StudentWeights)
+                           .Where(x => x.Id == id)
+                           .SingleOrDefault();
         }
 
         public IEnumerable<Student> FindAll()
         {
-            return _context.Students;
+            return _context.Students.Include(x => x.StudentWeights);
         }
 
         public void Create(Student entity)

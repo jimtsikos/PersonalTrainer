@@ -10,15 +10,12 @@ namespace DomainModel.StudentWeightsImpl
     [Table("StudentWeights")]
     public class StudentWeight : IAggregateRoot, IStudentWeight
     {
-        public Guid Id { get; protected set; }
-
-        public Student Student { get; protected set; }
-
-        public double Weight { get; protected set; }
-
-        public DateTime CreatedAt { get; protected set; }
-
-        public DateTime UpdatedAt { get; protected set; }
+        public virtual Guid Id { get; protected set; }
+        public virtual Guid StudentId { get; protected set; }
+        public virtual Student Student { get; protected set; }
+        public virtual double Weight { get; protected set; }
+        public virtual DateTime CreatedAt { get; protected set; }
+        public virtual DateTime UpdatedAt { get; protected set; }
 
         public StudentWeight Create(Student student, double weight)
         {

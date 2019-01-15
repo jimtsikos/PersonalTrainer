@@ -11,18 +11,19 @@ namespace DomainModel.StudentsImpl
     [Table("Students")]
     public class Student : IAggregateRoot, IStudent
     {
-        public Guid Id { get; protected set; }
-        public string FirstName { get; protected set; }
-        public string LastName { get; protected set; }
-        public string Description { get; protected set; }
-        public double Height { get; protected set; }
-        public double PayRate { get; protected set; }
-        public double PrepaidMoney { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
-        public DateTime UpdatedAt { get; protected set; }
-        public bool IsActive { get; protected set; }
-        public ICollection<StudentWeight> StudentWeights { get; protected set; }
-        public ICollection<LessonImpl.Lesson> Lessons { get; protected set; }
+        public virtual Guid Id { get; protected set; }
+        public virtual string FirstName { get; protected set; }
+        public virtual string LastName { get; protected set; }
+        public virtual string Description { get; protected set; }
+        public virtual double Height { get; protected set; }
+        public virtual double PayRate { get; protected set; }
+        public virtual double PrepaidMoney { get; protected set; }
+        public virtual DateTime CreatedAt { get; protected set; }
+        public virtual DateTime UpdatedAt { get; protected set; }
+        public virtual bool IsActive { get; protected set; }
+        
+        public virtual ICollection<StudentWeight> StudentWeights { get; set; }
+        public virtual ICollection<LessonImpl.Lesson> Lessons { get; protected set; }
 
         public Student Create(string firstname, string lastname, string description, double height, double payRate, double prepaidMoney, bool isActive)
         {
