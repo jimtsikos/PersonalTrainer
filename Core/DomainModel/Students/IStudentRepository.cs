@@ -1,15 +1,11 @@
-﻿using DomainModel.StudentsImpl;
+﻿using DomainModel.Base;
+using DomainModel.StudentsImpl;
 using System;
-using System.Collections.Generic;
 
 namespace DomainModel.Students
 {
-    public interface IStudentRepository
+    public interface IStudentRepository : IRepository<Student, Guid>
     {
-        void Create(Student entity);
-        void Delete(Student entity);
-        IEnumerable<Student> FindAll();
-        Student FindById(Guid id);
-        void Update(Student entity);
+        
     }
 }

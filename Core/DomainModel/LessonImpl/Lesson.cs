@@ -1,5 +1,4 @@
-﻿using Base.Domain;
-using Base.DomainImpl;
+﻿using DomainModel.Base;
 using DomainModel.Lesson;
 using DomainModel.LessonImpl.Enum;
 using DomainModel.StudentsImpl;
@@ -11,7 +10,7 @@ using System.Linq;
 namespace DomainModel.LessonImpl
 {
     [Table("Lesson")]
-    public class Lesson : IAggregateRoot, ILesson
+    public class Lesson : IAggregateRoot<Guid>, ILesson
     {
         public virtual Guid Id { get; protected set; }
         public virtual Guid StudentId { get; protected set; }
@@ -62,8 +61,6 @@ namespace DomainModel.LessonImpl
                 UpdatedAt = DateTime.UtcNow
             };
 
-            DomainEvents.Raise<LessonCreated>(new LessonCreated() { Lesson = lesson });
-
             return lesson;
         }
 
@@ -97,8 +94,6 @@ namespace DomainModel.LessonImpl
             lesson.IsActive = isActive;
             lesson.IsPaid = isPaid;
             lesson.UpdatedAt = DateTime.UtcNow;
-
-            DomainEvents.Raise<LessonUpdated>(new LessonUpdated() { Lesson = lesson });
 
             return lesson;
         }

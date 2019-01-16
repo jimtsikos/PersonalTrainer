@@ -29,7 +29,7 @@ namespace Application.Lessons.Service
 
         public LessonDto Get(Guid lessonId)
         {
-            Lesson lesson = _lessonRepository.FindById(lessonId);
+            Lesson lesson = _lessonRepository.FindOne(lessonId);
 
             return AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
         }
@@ -62,8 +62,8 @@ namespace Application.Lessons.Service
 
         public LessonDto Create(LessonDto lessonDto)
         {
-            Student student = _studentRepository.FindById(lessonDto.StudentId);
-            Trainer trainer = _trainerRepository.FindById(lessonDto.TrainerId);
+            Student student = _studentRepository.FindOne(lessonDto.StudentId);
+            Trainer trainer = _trainerRepository.FindOne(lessonDto.TrainerId);
 
             Lesson lesson = null;
             if (!_lesson.HasDublicateLesson(student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
@@ -87,7 +87,7 @@ namespace Application.Lessons.Service
                 throw new Exception("Id can't be empty");
             }
 
-            Lesson lesson = _lessonRepository.FindById(lessonDto.Id);
+            Lesson lesson = _lessonRepository.FindOne(lessonDto.Id);
 
             if (lesson == null)
             {
@@ -99,7 +99,7 @@ namespace Application.Lessons.Service
 
         public void Delete(Guid lessonId)
         {
-            Lesson lesson = _lessonRepository.FindById(lessonId);
+            Lesson lesson = _lessonRepository.FindOne(lessonId);
 
             if (lesson == null)
                 throw new Exception("No such lesson exists");

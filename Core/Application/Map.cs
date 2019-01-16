@@ -24,7 +24,7 @@ namespace Application
 
                 x.CreateMap<StudentWeight, StudentWeightDto>().ForMember(
                     dest => dest.StudentId,
-                    opt => opt.MapFrom(src => src.Student.Id));
+                    opt => opt.MapFrom(src => src.StudentId));
 
                 x.CreateMap<Lesson, LessonDto>();
             });

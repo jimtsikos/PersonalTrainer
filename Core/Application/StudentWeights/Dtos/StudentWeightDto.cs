@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Application.Students.Dtos;
+using System;
 
 namespace Application.StudentWeights.Dtos
 {
     public class StudentWeightDto
     {
         public Guid Id { get; set; }
-
+        
         public Guid StudentId { get; set; }
 
         public double Weight { get; set; }

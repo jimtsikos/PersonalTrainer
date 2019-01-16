@@ -1,5 +1,4 @@
-﻿using Base.Domain;
-using Base.DomainImpl;
+﻿using DomainModel.Base;
 using DomainModel.Students;
 using DomainModel.StudentWeightsImpl;
 using System;
@@ -9,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DomainModel.StudentsImpl
 {
     [Table("Students")]
-    public class Student : IAggregateRoot, IStudent
+    public class Student : IAggregateRoot<Guid>, IStudent
     {
         public virtual Guid Id { get; protected set; }
         public virtual string FirstName { get; protected set; }
@@ -61,8 +60,6 @@ namespace DomainModel.StudentsImpl
                 IsActive = isActive
             };
 
-            DomainEvents.Raise<StudentCreated>(new StudentCreated() { Student = student });
-
             return student;
         }
 
@@ -101,8 +98,6 @@ namespace DomainModel.StudentsImpl
             student.PrepaidMoney = prepaidMoney;
             student.UpdatedAt = DateTime.UtcNow;
             student.IsActive = isActive;
-
-            DomainEvents.Raise<StudentUpdated>(new StudentUpdated() { Student = student });
 
             return student;
         }

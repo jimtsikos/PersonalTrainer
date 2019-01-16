@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Base.Domain
+namespace DomainModel.Base
 {
     public interface IAggregateRoot
     {

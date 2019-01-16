@@ -20,7 +20,7 @@ namespace Application.Trainers.Service
 
         public TrainerDto Get(Guid trainerId)
         {
-            Trainer trainer = _trainerRepository.FindById(trainerId);
+            Trainer trainer = _trainerRepository.FindOne(trainerId);
 
             return AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
         }
@@ -48,7 +48,7 @@ namespace Application.Trainers.Service
                 throw new Exception("Id can't be empty");
             }
 
-            Trainer trainer = _trainerRepository.FindById(trainerDto.Id);
+            Trainer trainer = _trainerRepository.FindOne(trainerDto.Id);
 
             if (trainer == null)
             {
@@ -62,7 +62,7 @@ namespace Application.Trainers.Service
 
         public void Delete(Guid trainerId)
         {
-            Trainer trainer = _trainerRepository.FindById(trainerId);
+            Trainer trainer = _trainerRepository.FindOne(trainerId);
 
             if (trainer == null)
                 throw new Exception("No such trainer exists");

@@ -23,14 +23,21 @@ namespace Application.StudentWeights.Service
 
         public StudentWeightDto Get(Guid studentWeightId)
         {
-            StudentWeight studentWeight = _studentWeightRepository.FindById(studentWeightId);
+            StudentWeight studentWeight = _studentWeightRepository.FindOne(studentWeightId);
 
             return AutoMapper.Mapper.Map<StudentWeight, StudentWeightDto>(studentWeight);
         }
 
+        public IEnumerable<StudentWeightDto> GetList()
+        {
+            IEnumerable<StudentWeight> studentWeights = _studentWeightRepository.FindAll();
+
+            return AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, IEnumerable<StudentWeightDto>>(studentWeights);
+        }
+
         public IEnumerable<StudentWeightDto> GetList(Guid studentId)
         {
-            Student student = _studentRepository.FindById(studentId);
+            Student student = _studentRepository.FindOne(studentId);
 
             IEnumerable<StudentWeight> studentWeights = _studentWeightRepository.FindAll(student);
 
@@ -39,7 +46,7 @@ namespace Application.StudentWeights.Service
 
         public StudentWeightDto Create(StudentWeightDto studentWeightDto)
         {
-            StudentWeight studentWeight = _studentWeight.Create(_studentRepository.FindById(studentWeightDto.StudentId), studentWeightDto.Weight);
+            StudentWeight studentWeight = _studentWeight.Create(_studentRepository.FindOne(studentWeightDto.StudentId), studentWeightDto.Weight);
 
             _studentWeightRepository.Create(studentWeight);
 
@@ -53,7 +60,7 @@ namespace Application.StudentWeights.Service
                 throw new Exception("Id can't be empty");
             }
 
-            StudentWeight studentWeight = _studentWeightRepository.FindById(studentWeightDto.Id);
+            StudentWeight studentWeight = _studentWeightRepository.FindOne(studentWeightDto.Id);
 
             if (studentWeight == null)
             {
@@ -65,7 +72,7 @@ namespace Application.StudentWeights.Service
 
         public void Delete(Guid studentWeightId)
         {
-            StudentWeight studentWeight = _studentWeightRepository.FindById(studentWeightId);
+            StudentWeight studentWeight = _studentWeightRepository.FindOne(studentWeightId);
 
             if (studentWeight == null)
                 throw new Exception("No such student weight exists");

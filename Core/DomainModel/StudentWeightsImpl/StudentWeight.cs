@@ -1,5 +1,4 @@
-﻿using Base.Domain;
-using Base.DomainImpl;
+﻿using DomainModel.Base;
 using DomainModel.StudentsImpl;
 using DomainModel.StudentWeights;
 using System;
@@ -8,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DomainModel.StudentWeightsImpl
 {
     [Table("StudentWeights")]
-    public class StudentWeight : IAggregateRoot, IStudentWeight
+    public class StudentWeight : IAggregateRoot<Guid>, IStudentWeight
     {
         public virtual Guid Id { get; protected set; }
         public virtual Guid StudentId { get; protected set; }
@@ -38,8 +37,6 @@ namespace DomainModel.StudentWeightsImpl
                 UpdatedAt = DateTime.UtcNow
             };
 
-            DomainEvents.Raise<StudentWeightCreated>(new StudentWeightCreated() { StudentWeight = studentWeight });
-
             return studentWeight;
         }
         
@@ -58,8 +55,6 @@ namespace DomainModel.StudentWeightsImpl
             studentWeight.Student = student;
             studentWeight.Weight = weight;
             studentWeight.UpdatedAt = DateTime.UtcNow;
-
-            DomainEvents.Raise<StudentWeightUpdated>(new StudentWeightUpdated() { StudentWeight = studentWeight });
 
             return studentWeight;
         }

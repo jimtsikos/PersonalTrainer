@@ -19,7 +19,7 @@ namespace Application.Students.Service
 
         public StudentDto Get(Guid studentId)
         {
-            Student student = _studentRepository.FindById(studentId);
+            Student student = _studentRepository.FindOne(studentId);
 
             return AutoMapper.Mapper.Map<Student, StudentDto>(student);
         }
@@ -47,7 +47,7 @@ namespace Application.Students.Service
                 throw new Exception("Id can't be empty");
             }
 
-            Student student = _studentRepository.FindById(studentDto.Id);
+            Student student = _studentRepository.FindOne(studentDto.Id);
 
             if (student == null)
             {
@@ -59,7 +59,7 @@ namespace Application.Students.Service
 
         public void Delete(Guid studentId)
         {
-            Student student = _studentRepository.FindById(studentId);
+            Student student = _studentRepository.FindOne(studentId);
 
             if (student == null)
                 throw new Exception("No such student exists");

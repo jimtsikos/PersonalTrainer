@@ -1,13 +1,11 @@
-﻿using Base.Domain;
-using Base.DomainImpl;
+﻿using DomainModel.Base;
 using DomainModel.Trainers;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainModel.TrainersImpl
 {
-    public class Trainer : IAggregateRoot, ITrainer
+    public class Trainer : IAggregateRoot<Guid>, ITrainer
     {
         public virtual Guid Id { get; protected set; }
         public virtual string FirstName { get; protected set; }
@@ -49,8 +47,6 @@ namespace DomainModel.TrainersImpl
                 IsActive = isActive
             };
 
-            DomainEvents.Raise<TrainerCreated>(new TrainerCreated() { Trainer = trainer });
-
             return trainer;
         }
 
@@ -82,8 +78,6 @@ namespace DomainModel.TrainersImpl
             trainer.PayRate = payRate;
             trainer.IsActive = isActive;
             trainer.UpdatedAt = DateTime.UtcNow;
-
-            DomainEvents.Raise<TrainerUpdated>(new TrainerUpdated() { Trainer = trainer });
 
             return trainer;
         }

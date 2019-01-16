@@ -14,6 +14,12 @@ namespace Application.StudentWeights.Service
         StudentWeightDto Get(Guid studentWeightId);
 
         /// <summary>
+        /// Get students weights
+        /// </summary>
+        /// <returns>List of students weights</returns>
+        IEnumerable<StudentWeightDto> GetList();
+
+        /// <summary>
         /// Get a student weights by its id
         /// </summary>
         /// <param name="studentId">The student id</param>
