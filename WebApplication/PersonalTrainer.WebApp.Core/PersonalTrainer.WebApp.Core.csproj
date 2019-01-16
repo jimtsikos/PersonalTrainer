@@ -5,6 +5,25 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20190115080911_Initial.cs" />
+    <Compile Remove="Migrations\20190115080911_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190115115020_Initial.cs" />
+    <Compile Remove="Migrations\20190115115020_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190115115509_Initial.cs" />
+    <Compile Remove="Migrations\20190115115509_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190115120907_Initial.cs" />
+    <Compile Remove="Migrations\20190115120907_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190115121006_Initial.cs" />
+    <Compile Remove="Migrations\20190115121006_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190115121045_Initial.cs" />
+    <Compile Remove="Migrations\20190115121045_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190115121638_Initial.cs" />
+    <Compile Remove="Migrations\20190115121638_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190115122333_Initial.cs" />
+    <Compile Remove="Migrations\20190115122333_Initial.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -16,9 +35,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Application\Application.csproj" />
-    <ProjectReference Include="..\..\Core\Base\Base.csproj" />
     <ProjectReference Include="..\..\Core\DAL\DAL.csproj" />
     <ProjectReference Include="..\..\Core\DomainModel\DomainModel.csproj" />
+    <ProjectReference Include="..\..\Core\Extensions\Extensions.csproj" />
     <ProjectReference Include="..\..\Core\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 

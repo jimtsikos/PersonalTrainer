@@ -14,17 +14,17 @@ namespace PersonalTrainer.WebApp.Core.Controllers
 {
     public class TrainersController : Controller
     {
-        private readonly ITrainerService _trainersService;
+        private readonly ITrainerService _trainerService;
 
-        public TrainersController(ITrainerService trainersService)
+        public TrainersController(ITrainerService trainerService)
         {
-            _trainersService = trainersService;
+            _trainerService = trainerService;
         }
 
         // GET: Trainers
         public IActionResult Index()
         {
-            return View(_trainersService.GetList());
+            return View(_trainerService.GetList());
         }
 
         // GET: Trainers/Details/5
@@ -35,7 +35,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
 
-            TrainerDto trainer = _trainersService.Get(id);
+            var trainer = _trainerService.Get(id);
             if (trainer == null)
             {
                 return NotFound();
@@ -59,7 +59,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         {
             if (ModelState.IsValid)
             {
-                _trainersService.Create(trainer);
+                _trainerService.Create(trainer);
                 return RedirectToAction(nameof(Index));
             }
             return View(trainer);
@@ -73,7 +73,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
 
-            TrainerDto trainer = _trainersService.Get(id);
+            var trainer = _trainerService.Get(id);
             if (trainer == null)
             {
                 return NotFound();
@@ -97,7 +97,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 try
                 {
-                    _trainersService.Update(trainer);
+                    _trainerService.Update(trainer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,12 +118,12 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // GET: Trainers/Delete/5
         public IActionResult Delete(Guid id)
         {
-            if (id == null)
+            if (id == null || id == Guid.Empty)
             {
                 return NotFound();
             }
 
-            var trainer = _trainersService.Get(id);
+            var trainer = _trainerService.Get(id);
             if (trainer == null)
             {
                 return NotFound();
@@ -137,13 +137,13 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _trainersService.Delete(id);
+            _trainerService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool TrainerExists(Guid id)
         {
-            return _trainersService.GetList().Any(x => x.Id == id);
+            return _trainerService.GetList().Any(e => e.Id == id);
         }
     }
 }

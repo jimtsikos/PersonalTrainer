@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using PersonalTrainer.WebApp.Core.ServicesRegistration;
 
 namespace PersonalTrainer.WebApp.Core
@@ -31,7 +32,10 @@ namespace PersonalTrainer.WebApp.Core
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                    .AddJsonOptions(options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
             services.AddAntiforgery();
 
             Map mapper = new Map();
@@ -43,6 +47,7 @@ namespace PersonalTrainer.WebApp.Core
             services = ApplicationLayer.Resolve(services);
             services = DomainModelLayer.Resolve(services);
             services = InfrastructureLayer.Resolve(services);
+            services = Extentions.Resolve(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
