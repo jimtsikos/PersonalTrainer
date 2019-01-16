@@ -1,29 +1,56 @@
-﻿namespace DomainModel.LessonImpl.Enum
+﻿using System.ComponentModel;
+
+namespace DomainModel.LessonImpl.Enum
 {
     public enum Hour
     {
+        [Description("00")]
         Zero,
+        [Description("01")]
         One,
+        [Description("02")]
         Two,
+        [Description("03")]
         Three,
+        [Description("04")]
         Four,
+        [Description("05")]
         Five,
+        [Description("06")]
         Six,
+        [Description("07")]
         Seven,
+        [Description("08")]
         Eight,
+        [Description("09")]
         Nine,
+        [Description("10")]
         Ten,
+        [Description("11")]
         Eleven,
+        [Description("12")]
         Twelve,
+        [Description("13")]
         Thirteen,
+        [Description("14")]
         Fourteen,
+        [Description("15")]
         Fifteen,
+        [Description("16")]
         Sixteen,
+        [Description("17")]
         Seventeen,
+        [Description("18")]
+        Eighteen,
+        [Description("19")]
         Nineteen,
+        [Description("20")]
         Twenty,
+        [Description("21")]
         TwentyOne,
+        [Description("22")]
         TwentyTwo,
+        [Description("23")]
         TwentyThree
     }
 }

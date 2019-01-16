@@ -1,8 +1,16 @@
-﻿namespace DomainModel.LessonImpl.Enum
+﻿using System.ComponentModel;
+
+namespace DomainModel.LessonImpl.Enum
 {
     public enum Minutes
     {
+        [Description("00")]
         OClock,
-        Half
+        [Description("15")]
+        Quarter,
+        [Description("30")]
+        Half,
+        [Description("45")]
+        ThreeQuarters
     }
 }
