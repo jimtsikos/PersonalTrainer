@@ -17,12 +17,28 @@ namespace Infrastructure.Trainers
         {
         }
 
+        public override StudentWeight FindOne(Guid id)
+        {
+            return _trainersContext.StudentWeights
+                                   .Include(x => x.Student)
+                                   .Select(x => x)
+                                   .Where(x => x.Id == id)
+                                   .FirstOrDefault();
+        }
+
+        public override IEnumerable<StudentWeight> FindAll()
+        {
+            return _trainersContext.StudentWeights
+                                   .Include(x => x.Student)
+                                   .Select(x => x);
+        }
+
         public IEnumerable<StudentWeight> FindAll(Student student)
         {
             return _trainersContext.StudentWeights
+                                   .Include(x => x.Student)
                                    .Select(x => x)
-                                   .Where(x => x.Student == student)
-                                   .Include(x => x.Student);
+                                   .Where(x => x.Student == student);
         }
     }
 }

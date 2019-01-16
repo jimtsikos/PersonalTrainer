@@ -17,15 +17,23 @@ namespace Infrastructure.Trainers
         {
         }
 
-        //public override Lesson FindOne(Guid id)
-        //{
-        //    return _trainersContext.Lessons
-        //                           .Include(x => x.Student)
-        //                           .Include(x => x.Trainer)
-        //                           .Select(x => x)
-        //                           .Where(x => x.Id == id)
-        //                           .FirstOrDefault();
-        //}
+        public override Lesson FindOne(Guid id)
+        {
+            return _trainersContext.Lessons
+                                   .Include(x => x.Student)
+                                   .Include(x => x.Trainer)
+                                   .Select(x => x)
+                                   .Where(x => x.Id == id)
+                                   .FirstOrDefault();
+        }
+
+        public override IEnumerable<Lesson> FindAll()
+        {
+            return _trainersContext.Lessons
+                                   .Include(x => x.Student)
+                                   .Include(x => x.Trainer)
+                                   .Select(x => x);
+        }
 
         public IEnumerable<Lesson> FindByDate(DateTime dateTime)
         {
