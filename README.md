@@ -2,13 +2,13 @@
 
 [![Build Status](https://dev.azure.com/std100308/Personal%20Trainers/_apis/build/status/jimtsikos.PersonalTrainer?branchName=master)](https://dev.azure.com/std100308/Personal%20Trainers/_build/latest?definitionId=3?branchName=master)
 
-#Requirements
+## Requirements
 
 1. Visual Studio 2017
 2. .NET Core SDK 2.2
 3. Nuget
 
-#Technologies Used:
+## Technologies Used:
 
 1. DDD Architecture (still working on it)
 2. Entity Framework Core
@@ -19,7 +19,7 @@
 7. NUnit
 8. Azure Pipelines
 
-#What you may need to change:
+## What you may need to change:
 
 1. appsettings.json -> Change DefaultConnection to your Database Connection String
 2. PersonalTrainerWebDbInitializer.cs -> Add/Remove/Change Roles
@@ -29,7 +29,7 @@
     * Add-Migration Initial
     * Update-Database
 
-#Milestones (without time)
+## Milestones (without time)
 
 1. Complete tests
 2. Deploy the WebApp
