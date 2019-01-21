@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Application.Trainers.Service;
 using Application.Trainers.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
+    [Authorize(Roles = "System Administrator,Administrator,Moderator,Trainer")]
     public class TrainersController : Controller
     {
         private readonly ITrainerService _trainerService;

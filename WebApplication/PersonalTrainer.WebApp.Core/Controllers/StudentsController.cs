@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Application.Students.Service;
 using Application.Students.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
+    [Authorize(Roles = "System Administrator,Administrator,Moderator,Trainer")]
     public class StudentsController : Controller
     {
         private readonly IStudentService _studentService;

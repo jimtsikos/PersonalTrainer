@@ -8,9 +8,11 @@ using Application.Students.Service;
 using Application.Trainers.Service;
 using Application.Lessons.Dtos;
 using Application.Extensions.Enumarations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
+    [Authorize(Roles = "System Administrator,Administrator,Moderator,Trainer")]
     public class LessonsController : Controller
     {
         private readonly ILessonService _lessonService;

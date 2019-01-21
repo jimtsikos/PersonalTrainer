@@ -6,11 +6,13 @@ using DAL.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using PersonalTrainer.WebApp.Core.Areas.Identity.Data;
 using System;
 
 namespace PersonalTrainer.WebApp.Core
@@ -60,7 +62,7 @@ namespace PersonalTrainer.WebApp.Core
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -72,6 +74,7 @@ namespace PersonalTrainer.WebApp.Core
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
@@ -80,6 +83,10 @@ namespace PersonalTrainer.WebApp.Core
                     name: "default",
                     template: "{controller=Trainers}/{action=Index}/{id?}");
             });
+
+            PersonalTrainerWebDbInitializer personalTrainerWebDbInitializer = new PersonalTrainerWebDbInitializer();
+            personalTrainerWebDbInitializer.SeedRoles(roleManager);
+            personalTrainerWebDbInitializer.SeedUsers(userManager);
         }
     }
 }
