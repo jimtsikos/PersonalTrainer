@@ -7,8 +7,7 @@ using Application.Lessons.Service;
 using Application.Students.Service;
 using Application.Trainers.Service;
 using Application.Lessons.Dtos;
-using DomainModel.LessonImpl.Enum;
-using Extensions.Enumarations;
+using Application.Extensions.Enumarations;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -71,16 +70,9 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         public IActionResult Create()
         {
             ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
-
             ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
-
-            var hours = from Hour d in Enum.GetValues(typeof(Hour))
-                          select new { Id = (int)d, Name = _enumService.GetDescription(d) };
-            ViewData["Hours"] = new SelectList(hours, "Id", "Name");
-
-            var minutes = from Minutes d in Enum.GetValues(typeof(Minutes))
-                             select new { Id = (int)d, Name = _enumService.GetDescription(d) };
-            ViewData["Minutes"] = new SelectList(minutes, "Id", "Name");
+            ViewData["Hours"] = new SelectList(_enumService.GetHoursList(), "Id", "Name");
+            ViewData["Minutes"] = new SelectList(_enumService.GetMinutesList(), "Id", "Name");
             return View();
         }
 

@@ -1,5 +1,7 @@
-﻿using System;
-using Application;
+﻿using Application.Mapping;
+using Application.Registrer;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using DAL.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using PersonalTrainer.WebApp.Core.ServicesRegistration;
+using System;
 
 namespace PersonalTrainer.WebApp.Core
 {
@@ -20,10 +22,12 @@ namespace PersonalTrainer.WebApp.Core
             Configuration = configuration;
         }
 
+        public IContainer ApplicationContainer { get; private set; }
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -44,10 +48,15 @@ namespace PersonalTrainer.WebApp.Core
                 options => options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
 
-            services = ApplicationLayer.Resolve(services);
-            services = DomainModelLayer.Resolve(services);
-            services = InfrastructureLayer.Resolve(services);
-            services = Extentions.Resolve(services);
+            ContainerBuilder builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.RegisterModule<ApplicationLayerModule>();
+            builder.RegisterModule<DomainModelLayerModule>();
+            builder.RegisterModule<InfrastructureLayerModule>();
+            builder.RegisterModule<ExtensionsModule>();
+            this.ApplicationContainer = builder.Build();
+            
+            return new AutofacServiceProvider(this.ApplicationContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

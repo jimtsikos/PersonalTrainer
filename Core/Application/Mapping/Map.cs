@@ -8,7 +8,7 @@ using DomainModel.StudentsImpl;
 using DomainModel.StudentWeightsImpl;
 using DomainModel.TrainersImpl;
 
-namespace Application
+namespace Application.Mapping
 {
     public class Map : Profile
     {
