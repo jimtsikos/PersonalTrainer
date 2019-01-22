@@ -1,4 +1,5 @@
-﻿using Application.Lessons.Dtos;
+﻿using Application.Handlers;
+using Application.Lessons.Dtos;
 using System;
 using System.Collections.Generic;
 
@@ -11,20 +12,20 @@ namespace Application.Lessons.Service
         /// </summary>
         /// <param name="lessonId">The lesson id</param>
         /// <returns>The lesson DTO</returns>
-        LessonDto Get(Guid lessonId);
+        ResultHandler<LessonDto> Get(Guid lessonId);
 
         /// <summary>
         /// Get a list of all lessons
         /// </summary>
         /// <returns>The list of lessons</returns>
-        IEnumerable<LessonDto> GetList();
+        ResultHandler<IEnumerable<LessonDto>> GetList();
 
         /// <summary>
         /// Get a list of lessons by date
         /// </summary>
         /// <param name="dateTime">The datetime to search for</param>
         /// <returns>The list of lessons for a specific date</returns>
-        IEnumerable<LessonDto> GetByDate(DateTime dateTime);
+        ResultHandler<IEnumerable<LessonDto>> GetByDate(DateTime dateTime);
 
         /// <summary>
         /// Get a list of lessons by date and time
@@ -32,25 +33,25 @@ namespace Application.Lessons.Service
         /// <param name="dateTime">The datetime to search for</param>
         /// <param name="hour">The hour to search for</param>
         /// <returns>The list of lessons for a specific date and time</returns>
-        IEnumerable<LessonDto> GetByDateAndTime(DateTime dateTime, string hour);
+        ResultHandler<IEnumerable<LessonDto>> GetByDateAndTime(DateTime dateTime, string hour);
 
         /// <summary>
         /// Create a lesson
         /// </summary>
         /// <param name="LessonDto">The lesson DTO to be created</param>
         /// <returns>The lesson DTO</returns>
-        LessonDto Create(LessonDto lessonDto);
+        ResultHandler<LessonDto> Create(LessonDto lessonDto);
 
         /// <summary>
         /// Updates a lesson
         /// </summary>
         /// <param name="LessonDto">The lesson DTO to be updated</param>
-        void Update(LessonDto lessonDto);
+        ResultHandler<LessonDto> Update(LessonDto lessonDto);
 
         /// <summary>
         /// Deletes a lesson
         /// </summary>
         /// <param name="lessonId">The lesson id to be deleted</param>
-        void Delete(Guid lessonId);
+        ResultHandler<LessonDto> Delete(Guid lessonId);
     }
 }
