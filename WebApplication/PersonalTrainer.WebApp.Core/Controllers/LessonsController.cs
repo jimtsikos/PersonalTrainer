@@ -20,9 +20,6 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         private readonly IStudentService _studentService;
         private readonly IEnumService _enumService;
 
-        [TempData]
-        public string StatusMessage { get; set; }
-
         public LessonsController(ILessonService lessonService, 
                                  ITrainerService trainerService, 
                                  IStudentService studentService,
@@ -37,22 +34,14 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // GET: Lessons
         public IActionResult Index()
         {
-            var lessonList = _lessonService.GetList();
-            if (lessonList.HasErrors)
+            var lessonList = _lessonService.GetList().ToList();
+            lessonList.ForEach(x =>
             {
-                //TODO: Add error handling for interface
-            }
-            else
-            {
-                lessonList.TResult.ToList().ForEach(x =>
-                {
-                    var trainer = _trainerService.Get(x.TrainerId);
-                    var student = _studentService.Get(x.StudentId);
-                    ViewData[string.Format("Trainer_", Convert.ToString(x.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
-                    ViewData[string.Format("Student_", Convert.ToString(x.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
-                });
-            }
-            
+                var trainer = _trainerService.Get(x.TrainerId);
+                var student = _studentService.Get(x.StudentId);
+                ViewData[string.Format("Trainer_", Convert.ToString(x.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
+                ViewData[string.Format("Student_", Convert.ToString(x.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
+            });
             return View(lessonList);
         }
 
@@ -65,22 +54,16 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
 
             var lesson = _lessonService.Get(id);
-            if (lesson.HasErrors)
-            {
-                //TODO: Add error handling
-            }
-            else
-            {
-                if (lesson.TResult == null)
-                {
-                    return NotFound();
-                }
 
-                var trainer = _trainerService.Get(lesson.TResult.TrainerId);
-                var student = _studentService.Get(lesson.TResult.StudentId);
-                ViewData[string.Format("Trainer_", Convert.ToString(trainer.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
-                ViewData[string.Format("Student_", Convert.ToString(student.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
-            }            
+            var trainer = _trainerService.Get(lesson.TrainerId);
+            var student = _studentService.Get(lesson.StudentId);
+            ViewData[string.Format("Trainer_", Convert.ToString(trainer.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
+            ViewData[string.Format("Student_", Convert.ToString(student.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
+
+            if (lesson == null)
+            {
+                return NotFound();
+            }
 
             return View(lesson);
         }
@@ -121,24 +104,14 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
 
             var lesson = _lessonService.Get(id);
-            
-            if (lesson.HasErrors)
+            if (lesson == null)
             {
-                //TODO: Add error handling
+                return NotFound();
             }
-            else
-            {
-                if (lesson.TResult == null)
-                {
-                    return NotFound();
-                }
-
-                ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
-                ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
-                ViewData["Hours"] = new SelectList(_enumService.GetHoursList(), "Id", "Name", lesson.TResult.Hour);
-                ViewData["Minutes"] = new SelectList(_enumService.GetMinutesList(), "Id", "Name", lesson.TResult.Minutes);
-            }
-
+            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
+            ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
+            ViewData["Hours"] = new SelectList(_enumService.GetHoursList(), "Id", "Name", lesson.Hour);
+            ViewData["Minutes"] = new SelectList(_enumService.GetMinutesList(), "Id", "Name", lesson.Minutes);
             return View(lesson);
         }
 
@@ -187,23 +160,17 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
 
             var lesson = _lessonService.Get(id);
-            if (lesson.HasErrors)
-            {
-                //TODO: Add error handling
-            }
-            else
-            {
-                if (lesson.TResult == null)
-                {
-                    return NotFound();
-                }
 
-                var trainer = _trainerService.Get(lesson.TResult.TrainerId);
-                var student = _studentService.Get(lesson.TResult.StudentId);
-                ViewData[string.Format("Trainer_", Convert.ToString(trainer.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
-                ViewData[string.Format("Student_", Convert.ToString(student.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
+            var trainer = _trainerService.Get(lesson.TrainerId);
+            var student = _studentService.Get(lesson.StudentId);
+            ViewData[string.Format("Trainer_", Convert.ToString(trainer.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
+            ViewData[string.Format("Student_", Convert.ToString(student.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
+
+            if (lesson == null)
+            {
+                return NotFound();
             }
-            
+
             return View(lesson);
         }
 
@@ -218,16 +185,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
 
         private bool LessonExists(Guid id)
         {
-            var lessonList = _lessonService.GetList();
-            if (lessonList.HasErrors)
-            {
-                //TODO: Add error handling for interface
-                return false;
-            }
-            else
-            {
-                return lessonList.TResult.Any(e => e.Id == id);
-            }
+            return _lessonService.GetList().Any(e => e.Id == id);
         }
     }
 }

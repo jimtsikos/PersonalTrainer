@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Application.Handlers;
 using Application.Lessons.Dtos;
 using DomainModel.Lesson;
 using DomainModel.LessonImpl;
@@ -28,210 +27,95 @@ namespace Application.Lessons.Service
             _trainerRepository = trainerRepository;
         }
 
-        public ResultHandler<LessonDto> Get(Guid lessonId)
+        public LessonDto Get(Guid lessonId)
         {
-            ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
+            Lesson lesson = _lessonRepository.FindOne(lessonId);
 
-            try
-            {
-                Lesson lesson = _lessonRepository.FindOne(lessonId);
-                LessonDto lessonDto = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
-
-                resultHandler.TResult = lessonDto;
-            }
-            catch (Exception ex)
-            {
-                resultHandler.Errors.Add(ex.Message);
-            }
-
-            return resultHandler;
+            return AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
         }
 
-        public ResultHandler<IEnumerable<LessonDto>> GetList()
+        public IEnumerable<LessonDto> GetList()
         {
-            ResultHandler<IEnumerable<LessonDto>> resultHandler = new ResultHandler<IEnumerable<LessonDto>>();
+            IEnumerable<Lesson> lessons = _lessonRepository.FindAll();
 
-            try
-            {
-                IEnumerable<Lesson> lessons = _lessonRepository.FindAll();
-                IEnumerable<LessonDto> lessonsDto = AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
-
-                resultHandler.TResult = lessonsDto;
-            }
-            catch (Exception ex)
-            {
-                resultHandler.Errors.Add(ex.Message);
-            }
-
-            return resultHandler;
+            return AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
         }
 
-        public ResultHandler<IEnumerable<LessonDto>> GetByDate(DateTime dateTime)
+        public IEnumerable<LessonDto> GetByDate(DateTime dateTime)
         {
-            ResultHandler<IEnumerable<LessonDto>> resultHandler = new ResultHandler<IEnumerable<LessonDto>>();
+            IEnumerable<Lesson> lessons = _lessonRepository.FindByDate(dateTime);
 
-            try
-            {
-                IEnumerable<Lesson> lessons = _lessonRepository.FindByDate(dateTime);
-                IEnumerable<LessonDto> lessonsDto = AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
-
-                resultHandler.TResult = lessonsDto;
-            }
-            catch (Exception ex)
-            {
-                resultHandler.Errors.Add(ex.Message);
-            }
-
-            return resultHandler;
+            return AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
         }
 
-        public ResultHandler<IEnumerable<LessonDto>> GetByDateAndTime(DateTime dateTime, string hour)
+        public IEnumerable<LessonDto> GetByDateAndTime(DateTime dateTime, string hour)
         {
-            ResultHandler<IEnumerable<LessonDto>> resultHandler = new ResultHandler<IEnumerable<LessonDto>>();
-
             if (!Enum.TryParse(hour, out Hour hourParsed))
             {
-                resultHandler.Errors.Add("Hour is not regognised");
-                return resultHandler;
+                throw new Exception("hour is not regognised");
             }
 
-            try
-            {
-                IEnumerable<Lesson> lessons = _lessonRepository.FindByDateAndTime(dateTime, hourParsed);
-                IEnumerable<LessonDto> lessonsDto = AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
+            IEnumerable<Lesson> lessons = _lessonRepository.FindByDateAndTime(dateTime, hourParsed);
 
-                resultHandler.TResult = lessonsDto;
-            }
-            catch (Exception ex)
-            {
-                resultHandler.Errors.Add(ex.Message);
-            }
-
-            return resultHandler;
+            return AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
         }
 
-        public ResultHandler<LessonDto> Create(LessonDto lessonDto)
+        public LessonDto Create(LessonDto lessonDto)
         {
-            ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
+            Student student = _studentRepository.FindOne(lessonDto.StudentId);
+            Trainer trainer = _trainerRepository.FindOne(lessonDto.TrainerId);
 
-            try
+            Lesson lesson = null;
+            if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
             {
-                Student student = _studentRepository.FindOne(lessonDto.StudentId);
-                if (student == null)
-                {
-                    resultHandler.Errors.Add("Student could not be found");
-                    return resultHandler;
-                }
-
-                Trainer trainer = _trainerRepository.FindOne(lessonDto.TrainerId);
-                if (trainer == null)
-                {
-                    resultHandler.Errors.Add("Trainer could not be found");
-                    return resultHandler;
-                }
-
-                Lesson lesson = null;
-                if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
-                {
-                    lesson = _lesson.Create(student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
-                }
-                else
-                {
-                    resultHandler.Errors.Add("There is a dublicate lesson");
-                    return resultHandler;
-                }
-
-                _lessonRepository.Create(lesson);
-                lessonDto = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
-                resultHandler.TResult = lessonDto;
+                lesson = _lesson.Create(student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
             }
-            catch (Exception ex)
+            else
             {
-                resultHandler.Errors.Add(ex.Message);
+                throw new Exception("There is a dublicate lesson");
             }
 
-            return resultHandler;
+            _lessonRepository.Create(lesson);
+
+            return AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
         }
 
-        public ResultHandler<LessonDto> Update(LessonDto lessonDto)
+        public void Update(LessonDto lessonDto)
         {
-            ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
-
             if (lessonDto.Id == Guid.Empty)
             {
-                resultHandler.Errors.Add("Id can't be empty");
-                return resultHandler;
+                throw new Exception("Id can't be empty");
             }
 
-            try
+            Lesson lesson = _lessonRepository.FindOne(lessonDto.Id);
+            Student student = _studentRepository.FindOne(lessonDto.StudentId);
+            Trainer trainer = _trainerRepository.FindOne(lessonDto.TrainerId);
+
+            if (lesson == null)
             {
-                Lesson lesson = _lessonRepository.FindOne(lessonDto.Id);
-                if (lesson == null)
-                {
-                    resultHandler.Errors.Add("No such lesson exists");
-                    return resultHandler;
-                }
-
-                Student student = _studentRepository.FindOne(lessonDto.StudentId);
-                if (student == null)
-                {
-                    resultHandler.Errors.Add("Student could not be found");
-                    return resultHandler;
-                }
-
-                Trainer trainer = _trainerRepository.FindOne(lessonDto.TrainerId);
-                if (trainer == null)
-                {
-                    resultHandler.Errors.Add("Trainer could not be found");
-                    return resultHandler;
-                }
-
-                if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
-                {
-                    lesson = _lesson.Update(lesson, student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
-                }
-                else
-                {
-                    resultHandler.Errors.Add("There is a dublicate lesson");
-                    return resultHandler;
-                }
-                
-                _lessonRepository.Update(lesson);
-                lessonDto = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
-                resultHandler.TResult = lessonDto;
+                throw new Exception("No such lesson exists");
             }
-            catch (Exception ex)
+
+            if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
             {
-                resultHandler.Errors.Add(ex.Message);
+                lesson = _lesson.Update(lesson, student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
+            }
+            else
+            {
+                throw new Exception("There is a dublicate lesson");
             }
 
-            return resultHandler;
+            _lessonRepository.Update(lesson);
         }
 
-        public ResultHandler<LessonDto> Delete(Guid lessonId)
+        public void Delete(Guid lessonId)
         {
-            ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
+            Lesson lesson = _lessonRepository.FindOne(lessonId);
 
-            try
-            {
-                Lesson lesson = _lessonRepository.FindOne(lessonId);
-                if (lesson == null)
-                {
-                    resultHandler.Errors.Add("No such lesson exists");
-                    return resultHandler;
-                }
+            if (lesson == null)
+                throw new Exception("No such lesson exists");
 
-
-                _lessonRepository.Delete(lesson);
-                LessonDto lessonDto = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
-                resultHandler.TResult = lessonDto;
-            }
-            catch (Exception ex)
-            {
-                resultHandler.Errors.Add(ex.Message);
-            }
-
-            return resultHandler;
+            _lessonRepository.Delete(lesson);
         }
     }
 }
