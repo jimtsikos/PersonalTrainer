@@ -19,7 +19,7 @@ namespace PersonalTrainer.WebApp.Core.Areas.Identity
                 services.AddDbContext<PersonalTrainerWebContext>(options =>
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
-
+                
                 services.AddDefaultIdentity<User>().AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<PersonalTrainerWebContext>();
             });

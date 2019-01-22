@@ -3,15 +3,20 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        if (User.IsInRole("System Administrator"))
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-            </li>
-        }
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Trainers" asp-action="Index">Trainers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Lessons" asp-action="Index">Lessons</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav">
         <li class="nav-item">
             <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
         </li>
@@ -20,11 +25,19 @@
                 <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
             </form>
         </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
-</ul>
+        @if (User.IsInRole("System Administrator"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </li>
+        </ul>
+}

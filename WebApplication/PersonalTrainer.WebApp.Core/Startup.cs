@@ -62,7 +62,7 @@ namespace PersonalTrainer.WebApp.Core
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -83,10 +83,6 @@ namespace PersonalTrainer.WebApp.Core
                     name: "default",
                     template: "{controller=Trainers}/{action=Index}/{id?}");
             });
-
-            PersonalTrainerWebDbInitializer personalTrainerWebDbInitializer = new PersonalTrainerWebDbInitializer();
-            personalTrainerWebDbInitializer.SeedRoles(roleManager);
-            personalTrainerWebDbInitializer.SeedUsers(userManager);
         }
     }
 }

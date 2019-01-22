@@ -31,6 +31,8 @@ namespace PersonalTrainer.WebApp.Core.Areas.Identity.Pages.Account
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+            // TODO: Remove below hardcoded return url
+            returnUrl = "/";
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
