@@ -12,9 +12,9 @@ namespace Application.Lessons.Dtos
 
         public DateTime DateTime { get; set; }
 
-        public string Hour { get; set; }
+        public int Hour { get; set; }
 
-        public string Minutes { get; set; }
+        public int Minutes { get; set; }
 
         public bool IsActive { get; set; }
 

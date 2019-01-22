@@ -20,8 +20,8 @@ namespace DomainModel.Lesson
         DateTime CreatedAt { get; }
         DateTime UpdatedAt { get; }
 
-        LessonImpl.Lesson Create(Student student, Trainer trainer, DateTime dateTime, string hour, string minutes, bool isActive, bool isPaid);
-        LessonImpl.Lesson Update(LessonImpl.Lesson lesson, Student student, Trainer trainer, DateTime dateTime, string hour, string minutes, bool isActive, bool isPaid);
-        bool HasDublicateLesson(Student student, DateTime dateTime, string hour, string minutes);
+        LessonImpl.Lesson Create(Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid);
+        LessonImpl.Lesson Update(LessonImpl.Lesson lesson, Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid);
+        bool HasDublicateLesson(LessonImpl.Lesson lesson, Student student, DateTime dateTime, int hour, int minutes);
     }
 }

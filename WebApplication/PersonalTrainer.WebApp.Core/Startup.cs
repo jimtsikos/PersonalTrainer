@@ -75,7 +75,7 @@ namespace PersonalTrainer.WebApp.Core
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseCookiePolicy();
+            //app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {

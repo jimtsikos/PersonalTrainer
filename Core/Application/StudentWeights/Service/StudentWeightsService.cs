@@ -61,12 +61,14 @@ namespace Application.StudentWeights.Service
             }
 
             StudentWeight studentWeight = _studentWeightRepository.FindOne(studentWeightDto.Id);
+            Student student = _studentRepository.FindOne(studentWeightDto.StudentId);
 
             if (studentWeight == null)
             {
                 throw new Exception("No such student weight exists");
             }
 
+            studentWeight = _studentWeight.Update(studentWeight, student, studentWeightDto.Weight);
             _studentWeightRepository.Update(studentWeight);
         }
 

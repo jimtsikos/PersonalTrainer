@@ -54,6 +54,7 @@ namespace Application.Students.Service
                 throw new Exception("No such student exists");
             }
 
+            student = _student.Update(student, studentDto.FirstName, studentDto.LastName, studentDto.Description, studentDto.Height, studentDto.PayRate, studentDto.PrepaidMoney, studentDto.IsActive);
             _studentRepository.Update(student);
         }
 

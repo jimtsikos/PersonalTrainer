@@ -25,7 +25,7 @@ namespace DomainModel.LessonImpl
         public virtual DateTime CreatedAt { get; protected set; }
         public virtual DateTime UpdatedAt { get; protected set; }
 
-        public Lesson Create(Student student, Trainer trainer, DateTime dateTime, string hour, string minutes, bool isActive, bool isPaid)
+        public Lesson Create(Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid)
         {
             if (student == null)
             {
@@ -37,14 +37,16 @@ namespace DomainModel.LessonImpl
                 throw new ArgumentNullException("trainer");
             }
 
-            if (!System.Enum.TryParse(hour, out Hour hourParsed))
+            Hour hourParsed;
+            Minutes minutesParsed;
+            try
             {
-                throw new Exception("hour is not regognised");
+                hourParsed = (Hour)hour;
+                minutesParsed = (Minutes)minutes;
             }
-
-            if (!System.Enum.TryParse(minutes, out Minutes minutesParsed))
+            catch (Exception)
             {
-                throw new Exception("minutes is not regognised");
+                throw new Exception("hour/minutes is not regognised");
             }
 
             Lesson lesson = new Lesson()
@@ -64,7 +66,7 @@ namespace DomainModel.LessonImpl
             return lesson;
         }
 
-        public Lesson Update(Lesson lesson, Student student, Trainer trainer, DateTime dateTime, string hour, string minutes, bool isActive, bool isPaid)
+        public Lesson Update(Lesson lesson, Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid)
         {
             if (student == null)
             {
@@ -76,14 +78,16 @@ namespace DomainModel.LessonImpl
                 throw new ArgumentNullException("trainer");
             }
 
-            if (!System.Enum.TryParse(hour, out Hour hourParsed))
+            Hour hourParsed;
+            Minutes minutesParsed;
+            try
             {
-                throw new Exception("hour is not regognised");
+                hourParsed = (Hour)hour;
+                minutesParsed = (Minutes)minutes;
             }
-
-            if (!System.Enum.TryParse(minutes, out Minutes minutesParsed))
+            catch (Exception)
             {
-                throw new Exception("minutes is not regognised");
+                throw new Exception("hour/minutes is not regognised");
             }
 
             lesson.Student = student;
@@ -98,19 +102,36 @@ namespace DomainModel.LessonImpl
             return lesson;
         }
 
-        public bool HasDublicateLesson(Student student, DateTime dateTime, string hour, string minutes)
+        public bool HasDublicateLesson(Lesson lesson, Student student, DateTime dateTime, int hour, int minutes)
         {
             bool hasDublicateLesson = false;
 
-            if (!System.Enum.TryParse(hour, out Hour hourParsed))
+            Hour hourParsed;
+            Minutes minutesParsed;
+            try
             {
-                throw new Exception("hour is not regognised");
+                hourParsed = (Hour)hour;
+                minutesParsed = (Minutes)minutes;
+            }
+            catch (Exception)
+            {
+                throw new Exception("hour/minutes is not regognised");
             }
 
-            Lesson lesson = student.Lessons
-                                   .Select(x => x)
-                                   .Where(x => x.DateTime.Date.Day == dateTime.Date.Day && x.Hour == hourParsed)
-                                   .FirstOrDefault();
+            if (lesson == null)
+            {
+                lesson = student.Lessons
+                                .Select(x => x)
+                                .Where(x => x.DateTime.Date.Day == dateTime.Date.Day && x.Hour == hourParsed)
+                                .FirstOrDefault();
+            }
+            else
+            {
+                lesson = student.Lessons
+                                .Select(x => x)
+                                .Where(x => x.DateTime.Date.Day == dateTime.Date.Day && x.Hour == hourParsed && x.Id != lesson.Id)
+                                .FirstOrDefault();
+            }
 
             if (lesson != null)
             {

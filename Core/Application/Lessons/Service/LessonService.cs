@@ -66,7 +66,7 @@ namespace Application.Lessons.Service
             Trainer trainer = _trainerRepository.FindOne(lessonDto.TrainerId);
 
             Lesson lesson = null;
-            if (!_lesson.HasDublicateLesson(student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
+            if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
             {
                 lesson = _lesson.Create(student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
             }
@@ -88,10 +88,21 @@ namespace Application.Lessons.Service
             }
 
             Lesson lesson = _lessonRepository.FindOne(lessonDto.Id);
+            Student student = _studentRepository.FindOne(lessonDto.StudentId);
+            Trainer trainer = _trainerRepository.FindOne(lessonDto.TrainerId);
 
             if (lesson == null)
             {
                 throw new Exception("No such lesson exists");
+            }
+
+            if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
+            {
+                lesson = _lesson.Update(lesson, student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
+            }
+            else
+            {
+                throw new Exception("There is a dublicate lesson");
             }
 
             _lessonRepository.Update(lesson);

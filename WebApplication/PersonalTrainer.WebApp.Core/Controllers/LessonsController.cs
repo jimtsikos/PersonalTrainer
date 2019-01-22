@@ -110,6 +110,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
             ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
+            ViewData["Hours"] = new SelectList(_enumService.GetHoursList(), "Id", "Name", lesson.Hour);
+            ViewData["Minutes"] = new SelectList(_enumService.GetMinutesList(), "Id", "Name", lesson.Minutes);
             return View(lesson);
         }
 
