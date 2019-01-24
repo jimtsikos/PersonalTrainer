@@ -1,4 +1,4 @@
-﻿@model Application.StudentWeights.Dtos.StudentWeightDto
+﻿@model ResultViewModel<Application.StudentWeights.Dtos.StudentWeightDto>
 
 @{
     ViewData["Title"] = "Details";
@@ -9,34 +9,35 @@
 <div>
     <h4>StudentWeight</h4>
     <hr />
+    @Html.RenderPartialAsync("_StatusMessage", Model)
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Student Name
         </dt>
-        <dd class = "col-sm-10">
-            @ViewData["StudentName"]
+        <dd class="col-sm-10">
+            @Html.DisplayNameFor(model => model.Data.StudentName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Weight)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.Weight)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Weight)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.Weight)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.CreatedAt)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.CreatedAt)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.UpdatedAt)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.UpdatedAt)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Data.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -6,13 +6,12 @@ using DAL.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using PersonalTrainer.WebApp.Core.Areas.Identity.Data;
+using PersonalTrainer.WebApp.Core.Areas.Mapping;
 using System;
 
 namespace PersonalTrainer.WebApp.Core
@@ -45,6 +44,7 @@ namespace PersonalTrainer.WebApp.Core
             services.AddAntiforgery();
 
             Map mapper = new Map();
+            ViewModelMap viewModelMap = new ViewModelMap();
 
             services.AddDbContext<TrainersContext>(
                 options => options.UseSqlServer(

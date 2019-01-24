@@ -1,4 +1,4 @@
-﻿@model Application.Lessons.Dtos.LessonDto
+﻿@model ResultViewModel<Application.Lessons.Dtos.LessonDto>
 
 @{
     ViewData["Title"] = "Create";
@@ -8,41 +8,42 @@
 
 <h4>Lesson</h4>
 <hr />
+@Html.RenderPartialAsync("_StatusMessage", Model)
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
-                <select asp-for="StudentId" class ="form-control" asp-items="ViewBag.StudentId"></select>
+                <label asp-for=" Data.StudentId" class="control-label"></label>
+                <select asp-for="Data.StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="TrainerId" class="control-label"></label>
-                <select asp-for="TrainerId" class ="form-control" asp-items="ViewBag.TrainerId"></select>
+                <label asp-for="Data.TrainerId" class="control-label"></label>
+                <select asp-for="Data.TrainerId" class="form-control" asp-items="ViewBag.TrainerId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="DateTime" class="control-label"></label>
-                <input asp-for="DateTime" class="form-control" />
-                <span asp-validation-for="DateTime" class="text-danger"></span>
+                <label asp-for="Data.DateTime" class="control-label"></label>
+                <input asp-for="Data.DateTime" class="form-control" />
+                <span asp-validation-for="Data.DateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Hour" class="control-label"></label>
-                <select asp-for="Hour" class="form-control" asp-items="ViewBag.Hours"></select>
-                <span asp-validation-for="Hour" class="text-danger"></span>
+                <label asp-for="Data.Hour" class="control-label"></label>
+                <select asp-for="Data.Hour" class="form-control" asp-items="ViewBag.Hours"></select>
+                <span asp-validation-for="Data.Hour" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Minutes" class="control-label"></label>
-                <select asp-for="Minutes" class="form-control" asp-items="ViewBag.Minutes"></select>
-                <span asp-validation-for="Minutes" class="text-danger"></span>
+                <label asp-for="Data.Minutes" class="control-label"></label>
+                <select asp-for="Data.Minutes" class="form-control" asp-items="ViewBag.Minutes"></select>
+                <span asp-validation-for="Data.Minutes" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                    <input class="form-check-input" asp-for="Data.IsActive" /> @Html.DisplayNameFor(model => model.Data.IsActive)
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPaid" /> @Html.DisplayNameFor(model => model.IsPaid)
+                    <input class="form-check-input" asp-for="Data.IsPaid" /> @Html.DisplayNameFor(model => model.Data.IsPaid)
                 </label>
             </div>
             <div class="form-group">

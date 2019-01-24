@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Application.Students.Service;
 using Application.Students.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using PersonalTrainer.WebApp.Core.Models;
+using System.Collections.Generic;
+using Application.Handlers;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -21,7 +24,12 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // GET: Students
         public IActionResult Index()
         {
-            return View(_studentService.GetList());
+            var students = _studentService.GetList();
+
+            ResultViewModel<IEnumerable<StudentDto>> studentsViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<IEnumerable<StudentDto>>, ResultViewModel<IEnumerable<StudentDto>>>(students);
+
+            return View(studentsViewModel);
         }
 
         // GET: Students/Details/5
@@ -38,7 +46,10 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
 
-            return View(student);
+            ResultViewModel<StudentDto> studentViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentDto>, ResultViewModel<StudentDto>>(student);
+
+            return View(studentViewModel);
         }
 
         // GET: Students/Create
@@ -59,7 +70,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 _studentService.Create(student);
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View();
         }
 
         // GET: Students/Edit/5
@@ -75,7 +86,11 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
-            return View(student);
+
+            ResultViewModel<StudentDto> studentViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentDto>, ResultViewModel<StudentDto>>(student);
+
+            return View(studentViewModel);
         }
 
         // POST: Students/Edit/5
@@ -109,6 +124,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(student);
         }
 
@@ -140,7 +156,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
 
         private bool StudentExists(Guid id)
         {
-            return _studentService.GetList().Any(e => e.Id == id);
+            return _studentService.GetList().Data.Any(e => e.Id == id);
         }
     }
 }

@@ -9,6 +9,11 @@ using Application.Trainers.Service;
 using Application.Lessons.Dtos;
 using Application.Extensions.Enumarations;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using Application.Handlers;
+using PersonalTrainer.WebApp.Core.Models;
+using Application.Students.Dtos;
+using Application.Trainers.Dtos;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -34,15 +39,12 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // GET: Lessons
         public IActionResult Index()
         {
-            var lessonList = _lessonService.GetList().ToList();
-            lessonList.ForEach(x =>
-            {
-                var trainer = _trainerService.Get(x.TrainerId);
-                var student = _studentService.Get(x.StudentId);
-                ViewData[string.Format("Trainer_", Convert.ToString(x.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
-                ViewData[string.Format("Student_", Convert.ToString(x.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
-            });
-            return View(lessonList);
+            var lessonList = _lessonService.GetList();
+
+            ResultViewModel<IEnumerable<LessonDto>> lessonsViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<IEnumerable<LessonDto>>, ResultViewModel<IEnumerable<LessonDto>>>(lessonList);
+
+            return View(lessonsViewModel);   
         }
 
         // GET: Lessons/Details/5
@@ -54,25 +56,22 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
 
             var lesson = _lessonService.Get(id);
-
-            var trainer = _trainerService.Get(lesson.TrainerId);
-            var student = _studentService.Get(lesson.StudentId);
-            ViewData[string.Format("Trainer_", Convert.ToString(trainer.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
-            ViewData[string.Format("Student_", Convert.ToString(student.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
-
             if (lesson == null)
             {
                 return NotFound();
             }
 
-            return View(lesson);
+            ResultViewModel<LessonDto> lessonViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(lesson);
+
+            return View(lessonViewModel);
         }
 
         // GET: Lessons/Create
         public IActionResult Create()
         {
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
-            ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
             ViewData["Hours"] = new SelectList(_enumService.GetHoursList(), "Id", "Name");
             ViewData["Minutes"] = new SelectList(_enumService.GetMinutesList(), "Id", "Name");
             return View();
@@ -90,9 +89,9 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 _lessonService.Create(lesson);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
-            ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
-            return View(lesson);
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
+            return View();
         }
 
         // GET: Lessons/Edit/5
@@ -108,11 +107,15 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
-            ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
-            ViewData["Hours"] = new SelectList(_enumService.GetHoursList(), "Id", "Name", lesson.Hour);
-            ViewData["Minutes"] = new SelectList(_enumService.GetMinutesList(), "Id", "Name", lesson.Minutes);
-            return View(lesson);
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
+            ViewData["Hours"] = new SelectList(_enumService.GetHoursList(), "Id", "Name", lesson.Data.Hour);
+            ViewData["Minutes"] = new SelectList(_enumService.GetMinutesList(), "Id", "Name", lesson.Data.Minutes);
+
+            ResultViewModel<LessonDto> lessonViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(lesson);
+
+            return View(lessonViewModel);
         }
 
         // POST: Lessons/Edit/5
@@ -146,8 +149,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
-            ViewData["TrainerId"] = new SelectList(_trainerService.GetList(), "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
             return View(lesson);
         }
 
@@ -160,18 +163,15 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
 
             var lesson = _lessonService.Get(id);
-
-            var trainer = _trainerService.Get(lesson.TrainerId);
-            var student = _studentService.Get(lesson.StudentId);
-            ViewData[string.Format("Trainer_", Convert.ToString(trainer.Id))] = string.Format("{0} {1}", trainer.FirstName, trainer.LastName);
-            ViewData[string.Format("Student_", Convert.ToString(student.Id))] = string.Format("{0} {1}", student.FirstName, student.LastName);
-
             if (lesson == null)
             {
                 return NotFound();
             }
 
-            return View(lesson);
+            ResultViewModel<LessonDto> lessonViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(lesson);
+
+            return View(lessonViewModel);
         }
 
         // POST: Lessons/Delete/5
@@ -185,7 +185,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
 
         private bool LessonExists(Guid id)
         {
-            return _lessonService.GetList().Any(e => e.Id == id);
+            return _lessonService.GetList().Data.Any(e => e.Id == id);
         }
     }
 }

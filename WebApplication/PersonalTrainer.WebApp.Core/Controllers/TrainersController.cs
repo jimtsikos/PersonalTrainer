@@ -140,7 +140,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
 
         private bool TrainerExists(Guid id)
         {
-            return _trainerService.GetList().Any(e => e.Id == id);
+            return _trainerService.GetList().Data.Any(e => e.Id == id);
         }
     }
 }

@@ -7,6 +7,9 @@ using Application.StudentWeights.Service;
 using Application.Students.Service;
 using Application.StudentWeights.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using PersonalTrainer.WebApp.Core.Models;
+using System.Collections.Generic;
+using Application.Handlers;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -25,26 +28,12 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // GET: StudentWeights
         public IActionResult Index(Guid id)
         {
-            if (id == null || id == Guid.Empty)
-            {
-                var studentWeightsList = _studentWeightsService.GetList().ToList();
-                studentWeightsList.ForEach(x =>
-                {
-                    var student = _studentService.Get(x.StudentId);
-                    ViewData[Convert.ToString(x.Id)] = string.Format("{0} {1}", student.FirstName, student.LastName);
-                });
-                return View(studentWeightsList);
-            }
-            else
-            {
-                var studentWeightsList = _studentWeightsService.GetList(id).ToList();
-                studentWeightsList.ForEach(x =>
-                {
-                    var student = _studentService.Get(x.StudentId);
-                    ViewData[Convert.ToString(x.Id)] = string.Format("{0} {1}", student.FirstName, student.LastName);
-                });
-                return View(studentWeightsList);
-            }
+            var studentWeights = _studentWeightsService.GetList();
+
+            ResultViewModel<IEnumerable<StudentWeightDto>> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<IEnumerable<StudentWeightDto>>, ResultViewModel<IEnumerable<StudentWeightDto>>>(studentWeights);
+
+            return View(resultViewModel);
         }
 
         // GET: StudentWeights/Details/5
@@ -56,20 +45,21 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
 
             var studentWeight = _studentWeightsService.Get(id);
-            var student = _studentService.Get(studentWeight.StudentId);
-            ViewData[Convert.ToString(student.Id)] = string.Format("{0} {1}", student.FirstName, student.LastName);
             if (studentWeight == null)
             {
                 return NotFound();
             }
 
-            return View(studentWeight);
+            ResultViewModel<StudentWeightDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentWeightDto>, ResultViewModel<StudentWeightDto>>(studentWeight);
+
+            return View(resultViewModel);
         }
 
         // GET: StudentWeights/Create
         public IActionResult Create()
         {
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             return View();
         }
 
@@ -80,13 +70,15 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,StudentId,Weight")] StudentWeightDto studentWeight)
         {
+            ResultHandler<StudentWeightDto> resultHandler = new ResultHandler<StudentWeightDto>();
+
             if (ModelState.IsValid)
             {
-                _studentWeightsService.Create(studentWeight);
+                resultHandler = _studentWeightsService.Create(studentWeight);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
-            return View(studentWeight);
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            return View();
         }
 
         // GET: StudentWeights/Edit/5
@@ -102,7 +94,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             return View(studentWeight);
         }
 
@@ -137,7 +129,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList(), "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             return View(studentWeight);
         }
 
@@ -150,8 +142,6 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
 
             var studentWeight = _studentWeightsService.Get(id);
-            var student = _studentService.Get(studentWeight.StudentId);
-            ViewData[Convert.ToString(student.Id)] = string.Format("{0} {1}", student.FirstName, student.LastName);
             if (studentWeight == null)
             {
                 return NotFound();
@@ -171,7 +161,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
 
         private bool StudentWeightExists(Guid id)
         {
-            return _studentWeightsService.GetList().Any(e => e.Id == id);
+            return _studentWeightsService.GetList().Data.Any(e => e.Id == id);
         }
     }
 }

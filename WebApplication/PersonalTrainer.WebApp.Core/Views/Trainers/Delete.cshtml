@@ -1,4 +1,4 @@
-﻿@model Application.Trainers.Dtos.TrainerDto
+﻿@model ResultViewModel<Application.Trainers.Dtos.TrainerDto>
 
 @{
     ViewData["Title"] = "Delete";
@@ -10,53 +10,54 @@
 <div>
     <h4>Trainer</h4>
     <hr />
+    @Html.RenderPartialAsync("_StatusMessage", Model)
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.FirstName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.FirstName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.LastName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.LastName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.Description)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.Description)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PayRate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.PayRate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PayRate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.PayRate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.CreatedAt)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.CreatedAt)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.UpdatedAt)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.UpdatedAt)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsActive)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Data.IsActive)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsActive)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Data.IsActive)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Data.Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
