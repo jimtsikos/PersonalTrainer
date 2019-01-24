@@ -9,6 +9,8 @@ namespace Application.StudentWeights.Dtos
         
         public Guid StudentId { get; set; }
 
+        public string StudentName { get; set; }
+
         public double Weight { get; set; }
 
         public DateTime CreatedAt { get; set; }

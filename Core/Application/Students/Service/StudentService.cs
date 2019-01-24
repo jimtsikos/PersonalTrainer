@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Application.Handlers;
 using Application.Students.Dtos;
 using DomainModel.Students;
 using DomainModel.StudentsImpl;
@@ -17,55 +18,115 @@ namespace Application.Students.Service
             _studentRepository = studentRepository;
         }
 
-        public StudentDto Get(Guid studentId)
+        public ResultHandler<StudentDto> Get(Guid studentId)
         {
-            Student student = _studentRepository.FindOne(studentId);
+            ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
 
-            return AutoMapper.Mapper.Map<Student, StudentDto>(student);
+            try
+            {
+                Student student = _studentRepository.FindOne(studentId);
+                resultHandler.Data = AutoMapper.Mapper.Map<Student, StudentDto>(student);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
         }
 
-        public IEnumerable<StudentDto> GetList()
+        public ResultHandler<IEnumerable<StudentDto>> GetList()
         {
-            IEnumerable<Student> students = _studentRepository.FindAll();
+            ResultHandler<IEnumerable<StudentDto>> resultHandler = new ResultHandler<IEnumerable<StudentDto>>();
 
-            return AutoMapper.Mapper.Map<IEnumerable<Student>, IEnumerable<StudentDto>>(students);
+            try
+            {
+                IEnumerable<Student> students = _studentRepository.FindAll();
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Student>, IEnumerable<StudentDto>>(students);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
         }
 
-        public StudentDto Create(StudentDto studentDto)
+        public ResultHandler<StudentDto> Create(StudentDto studentDto)
         {
-            Student student = _student.Create(studentDto.FirstName, studentDto.LastName, studentDto.Description, studentDto.Height, studentDto.PayRate, studentDto.PrepaidMoney, studentDto.IsActive);
+            ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
 
-            _studentRepository.Create(student);
+            try
+            {
+                Student student = _student.Create(studentDto.FirstName, studentDto.LastName, studentDto.Description, studentDto.Height, studentDto.PayRate, studentDto.PrepaidMoney, studentDto.IsActive);
+                _studentRepository.Create(student);
+                resultHandler.Data = AutoMapper.Mapper.Map<Student, StudentDto>(student);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
 
-            return AutoMapper.Mapper.Map<Student, StudentDto>(student);
+            return resultHandler;
         }
 
-        public void Update(StudentDto studentDto)
+        public ResultHandler<StudentDto> Update(StudentDto studentDto)
         {
+            ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
+
             if (studentDto.Id == Guid.Empty)
             {
-                throw new Exception("Id can't be empty");
+                resultHandler.Errors.Add("Student id can't be empty");
+                return resultHandler;
             }
 
-            Student student = _studentRepository.FindOne(studentDto.Id);
-
-            if (student == null)
+            try
             {
-                throw new Exception("No such student exists");
+                Student student = _studentRepository.FindOne(studentDto.Id);
+
+                if (student == null)
+                {
+                    resultHandler.Errors.Add("No such student exists");
+                    return resultHandler;
+                }
+
+                student = _student.Update(student, studentDto.FirstName, studentDto.LastName, studentDto.Description, studentDto.Height, studentDto.PayRate, studentDto.PrepaidMoney, studentDto.IsActive);
+                _studentRepository.Update(student);
+
+                resultHandler.Data = AutoMapper.Mapper.Map<Student, StudentDto>(student);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
             }
 
-            student = _student.Update(student, studentDto.FirstName, studentDto.LastName, studentDto.Description, studentDto.Height, studentDto.PayRate, studentDto.PrepaidMoney, studentDto.IsActive);
-            _studentRepository.Update(student);
+            return resultHandler;
         }
 
-        public void Delete(Guid studentId)
+        public ResultHandler<StudentDto> Delete(Guid studentId)
         {
-            Student student = _studentRepository.FindOne(studentId);
+            ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
 
-            if (student == null)
-                throw new Exception("No such student exists");
+            try
+            {
+                Student student = _studentRepository.FindOne(studentId);
 
-            _studentRepository.Delete(student);
+                if (student == null)
+                {
+                    resultHandler.Errors.Add("No such student exists");
+                    return resultHandler;
+                }
+
+                _studentRepository.Delete(student);
+
+                resultHandler.Data = AutoMapper.Mapper.Map<Student, StudentDto>(student);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
         }
     }
 }

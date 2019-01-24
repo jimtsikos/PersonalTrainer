@@ -4,6 +4,7 @@ using DomainModel.Trainers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Application.Handlers;
 
 namespace Application.Trainers.Service
 {
@@ -18,56 +19,111 @@ namespace Application.Trainers.Service
             _trainerRepository = trainerRepository;
         }
 
-        public TrainerDto Get(Guid trainerId)
+        public ResultHandler<TrainerDto> Get(Guid trainerId)
         {
-            Trainer trainer = _trainerRepository.FindOne(trainerId);
+            ResultHandler<TrainerDto> resultHandler = new ResultHandler<TrainerDto>();
 
-            return AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
+            try
+            {
+                Trainer trainer = _trainerRepository.FindOne(trainerId);
+                resultHandler.Data = AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
         }
 
-        public IEnumerable<TrainerDto> GetList()
+        public ResultHandler<IEnumerable<TrainerDto>> GetList()
         {
-            IEnumerable<Trainer> trainers = _trainerRepository.FindAll();
+            ResultHandler<IEnumerable<TrainerDto>> resultHandler = new ResultHandler<IEnumerable<TrainerDto>>();
 
-            return AutoMapper.Mapper.Map<IEnumerable<Trainer>, IEnumerable<TrainerDto>>(trainers);
+            try
+            {
+                IEnumerable<Trainer> trainers = _trainerRepository.FindAll();
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Trainer>, IEnumerable<TrainerDto>>(trainers);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
         }
 
-        public TrainerDto Create(TrainerDto trainerDto)
+        public ResultHandler<TrainerDto> Create(TrainerDto trainerDto)
         {
-            Trainer trainer = _trainer.Create(trainerDto.FirstName, trainerDto.LastName, trainerDto.Description, trainerDto.PayRate, trainerDto.IsActive);
+            ResultHandler<TrainerDto> resultHandler = new ResultHandler<TrainerDto>();
 
-            _trainerRepository.Create(trainer);
+            try
+            {
+                Trainer trainer = _trainer.Create(trainerDto.FirstName, trainerDto.LastName, trainerDto.Description, trainerDto.PayRate, trainerDto.IsActive);
+                _trainerRepository.Create(trainer);
+                resultHandler.Data = AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
 
-            return AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
+            return resultHandler;
         }
 
-        public void Update(TrainerDto trainerDto)
+        public ResultHandler<TrainerDto> Update(TrainerDto trainerDto)
         {
+            ResultHandler<TrainerDto> resultHandler = new ResultHandler<TrainerDto>();
+
             if (trainerDto.Id == Guid.Empty)
             {
-                throw new Exception("Id can't be empty");
+                resultHandler.Errors.Add("Trainer id can't be empty");
+                return resultHandler;
             }
 
-            Trainer trainer = _trainerRepository.FindOne(trainerDto.Id);
-
-            if (trainer == null)
+            try
             {
-                throw new Exception("No such trainer exists");
+                Trainer trainer = _trainerRepository.FindOne(trainerDto.Id);
+                if (trainer == null)
+                {
+                    resultHandler.Errors.Add("No such trainer exists");
+                    return resultHandler;
+                }
+
+                trainer = _trainer.Update(trainer, trainerDto.FirstName, trainerDto.LastName, trainerDto.Description, trainerDto.PayRate, trainerDto.IsActive);
+                _trainerRepository.Update(trainer);
+                resultHandler.Data = AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
             }
 
-            trainer = _trainer.Update(trainer, trainerDto.FirstName, trainerDto.LastName, trainerDto.Description, trainerDto.PayRate, trainerDto.IsActive);
-
-            _trainerRepository.Update(trainer);
+            return resultHandler;
         }
 
-        public void Delete(Guid trainerId)
+        public ResultHandler<TrainerDto> Delete(Guid trainerId)
         {
-            Trainer trainer = _trainerRepository.FindOne(trainerId);
+            ResultHandler<TrainerDto> resultHandler = new ResultHandler<TrainerDto>();
 
-            if (trainer == null)
-                throw new Exception("No such trainer exists");
+            try
+            {
+                Trainer trainer = _trainerRepository.FindOne(trainerId);
+                if (trainer == null)
+                {
+                    resultHandler.Errors.Add("No such trainer exists");
+                    return resultHandler;
+                }
 
-            _trainerRepository.Delete(trainer);
+                _trainerRepository.Delete(trainer);
+                resultHandler.Data = AutoMapper.Mapper.Map<Trainer, TrainerDto>(trainer);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
         }
     }
 }
