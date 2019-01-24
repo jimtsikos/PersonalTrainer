@@ -91,7 +91,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
-            return View();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Lessons/Edit/5
@@ -151,7 +151,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
-            return View(lesson);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Lessons/Delete/5

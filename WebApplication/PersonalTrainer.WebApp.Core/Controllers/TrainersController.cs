@@ -59,7 +59,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 _trainerService.Create(trainer);
                 return RedirectToAction(nameof(Index));
             }
-            return View(trainer);
+            return View();
         }
 
         // GET: Trainers/Edit/5
@@ -109,7 +109,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(trainer);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Trainers/Delete/5

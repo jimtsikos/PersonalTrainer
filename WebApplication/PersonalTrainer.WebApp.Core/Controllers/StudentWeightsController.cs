@@ -130,7 +130,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
-            return View(studentWeight);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: StudentWeights/Delete/5

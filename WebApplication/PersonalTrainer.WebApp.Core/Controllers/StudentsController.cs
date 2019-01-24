@@ -125,7 +125,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(student);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Students/Delete/5
