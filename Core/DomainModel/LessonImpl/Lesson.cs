@@ -20,12 +20,11 @@ namespace DomainModel.LessonImpl
         public virtual DateTime DateTime { get; protected set; }
         public virtual Hour Hour { get; protected set; }
         public virtual Minutes Minutes { get; protected set; }
-        public virtual bool IsActive { get; protected set; }
-        public virtual bool IsPaid { get; protected set; }
+        public virtual bool IsCompleted { get; protected set; }
         public virtual DateTime CreatedAt { get; protected set; }
         public virtual DateTime UpdatedAt { get; protected set; }
 
-        public Lesson Create(Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid)
+        public Lesson Create(Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isCompleted)
         {
             if (student == null)
             {
@@ -57,8 +56,7 @@ namespace DomainModel.LessonImpl
                 DateTime = dateTime,
                 Hour = hourParsed,
                 Minutes = minutesParsed,
-                IsActive = isActive,
-                IsPaid = isPaid,
+                IsCompleted = isCompleted,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -66,7 +64,7 @@ namespace DomainModel.LessonImpl
             return lesson;
         }
 
-        public Lesson Update(Lesson lesson, Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid)
+        public Lesson Update(Lesson lesson, Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isCompleted)
         {
             if (student == null)
             {
@@ -95,8 +93,7 @@ namespace DomainModel.LessonImpl
             lesson.DateTime = dateTime;
             lesson.Hour = hourParsed;
             lesson.Minutes = minutesParsed;
-            lesson.IsActive = isActive;
-            lesson.IsPaid = isPaid;
+            lesson.IsCompleted = isCompleted;
             lesson.UpdatedAt = DateTime.UtcNow;
 
             return lesson;
@@ -141,14 +138,14 @@ namespace DomainModel.LessonImpl
             return hasDublicateLesson;
         }
 
-        public Lesson MarkAsPaid(Lesson lesson)
+        public Lesson MarkAsCompleted(Lesson lesson)
         {
             if (lesson == null)
             {
                 throw new ArgumentNullException("lesson");
             }
 
-            lesson.IsPaid = true;
+            lesson.IsCompleted = true;
 
             return lesson;
         }

@@ -135,7 +135,7 @@ namespace Application.Lessons.Service
                 Lesson lesson = null;
                 if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
                 {
-                    lesson = _lesson.Create(student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
+                    lesson = _lesson.Create(student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsCompleted);
                 }
                 else
                 {
@@ -189,7 +189,7 @@ namespace Application.Lessons.Service
 
                 if (!_lesson.HasDublicateLesson(lesson, student, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes))
                 {
-                    lesson = _lesson.Update(lesson, student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsActive, lessonDto.IsPaid);
+                    lesson = _lesson.Update(lesson, student, trainer, lessonDto.DateTime, lessonDto.Hour, lessonDto.Minutes, lessonDto.IsCompleted);
                 }
                 else
                 {
@@ -233,7 +233,7 @@ namespace Application.Lessons.Service
             return resultHandler;
         }
 
-        public ResultHandler<LessonDto> MarkLessonAsPaid(Guid lessonId)
+        public ResultHandler<LessonDto> MarkAsCompleted(Guid lessonId)
         {
             ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
 
@@ -246,7 +246,7 @@ namespace Application.Lessons.Service
                     return resultHandler;
                 }
 
-                lesson = _lesson.MarkAsPaid(lesson);
+                lesson = _lesson.MarkAsCompleted(lesson);
                 _lessonRepository.Update(lesson);
                 resultHandler.Data = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
             }

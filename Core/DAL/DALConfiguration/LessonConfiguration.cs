@@ -12,8 +12,7 @@ namespace DAL.DALConfiguration
             builder.Property(x => x.DateTime).IsRequired();
             builder.Property(x => x.Hour).IsRequired();
             builder.Property(x => x.Minutes).IsRequired();
-            builder.Property(x => x.IsPaid).IsRequired();
-            builder.Property(x => x.IsActive).IsRequired();
+            builder.Property(x => x.IsCompleted).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.UpdatedAt).IsRequired();
 

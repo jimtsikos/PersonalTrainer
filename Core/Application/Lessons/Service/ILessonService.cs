@@ -68,6 +68,6 @@ namespace Application.Lessons.Service
         /// </summary>
         /// <param name="lessonId">The lesson id to be deleted</param>
         /// <returns>The result handler object with the lesson DTO</</returns>
-        ResultHandler<LessonDto> MarkLessonAsPaid(Guid lessonId);
+        ResultHandler<LessonDto> MarkAsCompleted(Guid lessonId);
     }
 }

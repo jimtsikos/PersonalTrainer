@@ -20,9 +20,7 @@ namespace Application.Lessons.Dtos
 
         public int Minutes { get; set; }
 
-        public bool IsActive { get; set; }
-
-        public bool IsPaid { get; set; }
+        public bool IsCompleted { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

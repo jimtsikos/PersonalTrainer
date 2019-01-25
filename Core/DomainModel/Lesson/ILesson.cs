@@ -15,14 +15,13 @@ namespace DomainModel.Lesson
         DateTime DateTime { get; }
         Hour Hour { get; }
         Minutes Minutes { get; }
-        bool IsActive { get; }
-        bool IsPaid { get; }
+        bool IsCompleted { get; }
         DateTime CreatedAt { get; }
         DateTime UpdatedAt { get; }
 
-        LessonImpl.Lesson Create(Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid);
-        LessonImpl.Lesson Update(LessonImpl.Lesson lesson, Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid);
+        LessonImpl.Lesson Create(Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isCompleted);
+        LessonImpl.Lesson Update(LessonImpl.Lesson lesson, Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isCompleted);
         bool HasDublicateLesson(LessonImpl.Lesson lesson, Student student, DateTime dateTime, int hour, int minutes);
-        LessonImpl.Lesson MarkAsPaid(LessonImpl.Lesson lesson);
+        LessonImpl.Lesson MarkAsCompleted(LessonImpl.Lesson lesson);
     }
 }
