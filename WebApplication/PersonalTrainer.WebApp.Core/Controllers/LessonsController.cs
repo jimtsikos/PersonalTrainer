@@ -14,6 +14,7 @@ using Application.Handlers;
 using PersonalTrainer.WebApp.Core.Models;
 using Application.Students.Dtos;
 using Application.Trainers.Dtos;
+using Application.Extensions.Paging;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -37,12 +38,24 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         }
 
         // GET: Lessons
-        public IActionResult Index()
+        public IActionResult Index(string dateTime, int? page)
         {
-            var lessonList = _lessonService.GetList();
+            ResultHandler<PaginatedList<LessonDto>> lessons;
+            if (!string.IsNullOrEmpty(dateTime))
+            {
+                lessons = _lessonService.GetByDate(DateTime.Parse(dateTime));
+            }
+            else
+            {
+                lessons = _lessonService.GetByDate(DateTime.UtcNow);
+            }
 
-            ResultViewModel<IEnumerable<LessonDto>> lessonsViewModel =
-                AutoMapper.Mapper.Map<ResultHandler<IEnumerable<LessonDto>>, ResultViewModel<IEnumerable<LessonDto>>>(lessonList);
+            page = page != null ? page : 1;
+            int pageSize = 10;
+            lessons.Data = PaginatedList<LessonDto>.Create(lessons.Data.AsQueryable(), page ?? 1, pageSize);
+
+            ResultViewModel<PaginatedList<LessonDto>> lessonsViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<PaginatedList<LessonDto>>, ResultViewModel<PaginatedList<LessonDto>>>(lessons);
 
             return View(lessonsViewModel);   
         }
@@ -84,14 +97,20 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,StudentId,TrainerId,DateTime,Hour,Minutes,IsActive,IsPaid")] LessonDto lesson)
         {
+            ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
+
             if (ModelState.IsValid)
             {
-                _lessonService.Create(lesson);
+                resultHandler = _lessonService.Create(lesson);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
-            return RedirectToAction(nameof(Index));
+
+            ResultViewModel<LessonDto> lessonViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(resultHandler);
+
+            return View(resultHandler);
         }
 
         // GET: Lessons/Edit/5
@@ -125,6 +144,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id,StudentId,TrainerId,DateTime,Hour,Minutes,IsActive,IsPaid")] LessonDto lesson)
         {
+            ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
+
             if (id != lesson.Id)
             {
                 return NotFound();
@@ -134,7 +155,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 try
                 {
-                    _lessonService.Update(lesson);
+                    resultHandler = _lessonService.Update(lesson);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,7 +172,11 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
-            return RedirectToAction(nameof(Index));
+
+            ResultViewModel<LessonDto> lessonViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(resultHandler);
+
+            return View(lessonViewModel);
         }
 
         // GET: Lessons/Delete/5

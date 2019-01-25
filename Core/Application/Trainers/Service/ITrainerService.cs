@@ -1,7 +1,7 @@
-﻿using Application.Handlers;
+﻿using Application.Extensions.Paging;
+using Application.Handlers;
 using Application.Trainers.Dtos;
 using System;
-using System.Collections.Generic;
 
 namespace Application.Trainers.Service
 {
@@ -18,8 +18,14 @@ namespace Application.Trainers.Service
         /// Get a list of trainers
         /// </summary>
         /// <returns>A list of trainer DTO</returns>
-        /// <returns>The result handler object with a list of trainer DTO</returns>
-        ResultHandler<IEnumerable<TrainerDto>> GetList();
+        ResultHandler<PaginatedList<TrainerDto>> GetList();
+
+        /// <summary>
+        /// Get a list of trainers based on their name
+        /// </summary>
+        /// <param name="name">The trainer name</param>
+        /// <returns>The result handler object with a list of trainer DTO based on their name</returns>
+        ResultHandler<PaginatedList<TrainerDto>> GetList(string name);
 
         /// <summary>
         /// Create a trainer

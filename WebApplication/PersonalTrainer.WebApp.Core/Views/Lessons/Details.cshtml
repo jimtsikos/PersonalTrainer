@@ -24,10 +24,10 @@
             @Html.DisplayNameFor(model => model.Data.TrainerName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Data.DateTime)
+            @Html.DisplayNameFor(model => model.Data.DateTime.ToShortDateString())
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Data.DateTime)
+            @Html.DisplayFor(model => model.Data.DateTime.ToShortDateString())
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Data.Hour)

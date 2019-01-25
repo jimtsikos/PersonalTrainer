@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using PersonalTrainer.WebApp.Core.Models;
 using System.Collections.Generic;
 using Application.Handlers;
+using Application.Extensions.Paging;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -26,12 +27,19 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         }
 
         // GET: StudentWeights
-        public IActionResult Index(Guid id)
+        public IActionResult Index(Guid studentId, int? page)
         {
-            var studentWeights = _studentWeightsService.GetList();
+            var students = _studentService.GetList();
+            ViewData["Student"] = new SelectList(students.Data, "Id", "LastName", studentId);
 
-            ResultViewModel<IEnumerable<StudentWeightDto>> resultViewModel =
-                AutoMapper.Mapper.Map<ResultHandler<IEnumerable<StudentWeightDto>>, ResultViewModel<IEnumerable<StudentWeightDto>>>(studentWeights);
+            var studentWeights = _studentWeightsService.GetList(studentId);
+
+            page = page != null ? page : 1;
+            int pageSize = 10;
+            studentWeights.Data = PaginatedList<StudentWeightDto>.Create(studentWeights.Data.AsQueryable(), page ?? 1, pageSize);
+
+            ResultViewModel<PaginatedList<StudentWeightDto>> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<PaginatedList<StudentWeightDto>>, ResultViewModel<PaginatedList<StudentWeightDto>>>(studentWeights);
 
             return View(resultViewModel);
         }
@@ -95,7 +103,11 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
-            return View(studentWeight);
+
+            ResultViewModel<StudentWeightDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentWeightDto>, ResultViewModel<StudentWeightDto>>(studentWeight);
+
+            return View(resultViewModel);
         }
 
         // POST: StudentWeights/Edit/5
@@ -105,6 +117,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id,StudentId,Weight")] StudentWeightDto studentWeight)
         {
+            ResultHandler<StudentWeightDto> resultHandler = new ResultHandler<StudentWeightDto>();
+
             if (id != studentWeight.Id)
             {
                 return NotFound();
@@ -114,7 +128,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 try
                 {
-                    _studentWeightsService.Update(studentWeight);
+                    resultHandler = _studentWeightsService.Update(studentWeight);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +144,11 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
-            return RedirectToAction(nameof(Index));
+
+            ResultViewModel<StudentWeightDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentWeightDto>, ResultViewModel<StudentWeightDto>>(resultHandler);
+
+            return View(resultViewModel);
         }
 
         // GET: StudentWeights/Delete/5
@@ -147,7 +165,10 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
 
-            return View(studentWeight);
+            ResultViewModel<StudentWeightDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentWeightDto>, ResultViewModel<StudentWeightDto>>(studentWeight);
+
+            return View(resultViewModel);
         }
 
         // POST: StudentWeights/Delete/5

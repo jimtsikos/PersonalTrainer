@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Application.Extensions.Paging;
 using Application.Handlers;
 using Application.StudentWeights.Dtos;
 using DomainModel.Students;
@@ -39,14 +40,14 @@ namespace Application.StudentWeights.Service
             return resultHandler;
         }
 
-        public ResultHandler<IEnumerable<StudentWeightDto>> GetList()
+        public ResultHandler<PaginatedList<StudentWeightDto>> GetList()
         {
-            ResultHandler<IEnumerable<StudentWeightDto>> resultHandler = new ResultHandler<IEnumerable<StudentWeightDto>>();
+            ResultHandler<PaginatedList<StudentWeightDto>> resultHandler = new ResultHandler<PaginatedList<StudentWeightDto>>();
 
             try
             {
                 IEnumerable<StudentWeight> studentWeights = _studentWeightRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, IEnumerable<StudentWeightDto>>(studentWeights);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, PaginatedList<StudentWeightDto>>(studentWeights);
             }
             catch (Exception ex)
             {
@@ -56,9 +57,9 @@ namespace Application.StudentWeights.Service
             return resultHandler;
         }
 
-        public ResultHandler<IEnumerable<StudentWeightDto>> GetList(Guid studentId)
+        public ResultHandler<PaginatedList<StudentWeightDto>> GetList(Guid studentId)
         {
-            ResultHandler<IEnumerable<StudentWeightDto>> resultHandler = new ResultHandler<IEnumerable<StudentWeightDto>>();
+            ResultHandler<PaginatedList<StudentWeightDto>> resultHandler = new ResultHandler<PaginatedList<StudentWeightDto>>();
 
             try
             {
@@ -69,7 +70,7 @@ namespace Application.StudentWeights.Service
                 }
 
                 IEnumerable<StudentWeight> studentWeights = _studentWeightRepository.FindAll(student);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, IEnumerable<StudentWeightDto>>(studentWeights);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, PaginatedList<StudentWeightDto>>(studentWeights);
             }
             catch (Exception ex)
             {

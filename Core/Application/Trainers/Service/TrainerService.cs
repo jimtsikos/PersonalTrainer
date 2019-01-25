@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Application.Handlers;
+using Application.Extensions.Paging;
 
 namespace Application.Trainers.Service
 {
@@ -36,14 +37,31 @@ namespace Application.Trainers.Service
             return resultHandler;
         }
 
-        public ResultHandler<IEnumerable<TrainerDto>> GetList()
+        public ResultHandler<PaginatedList<TrainerDto>> GetList()
         {
-            ResultHandler<IEnumerable<TrainerDto>> resultHandler = new ResultHandler<IEnumerable<TrainerDto>>();
+            ResultHandler<PaginatedList<TrainerDto>> resultHandler = new ResultHandler<PaginatedList<TrainerDto>>();
 
             try
             {
                 IEnumerable<Trainer> trainers = _trainerRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Trainer>, IEnumerable<TrainerDto>>(trainers);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Trainer>, PaginatedList<TrainerDto>>(trainers);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
+        }
+
+        public ResultHandler<PaginatedList<TrainerDto>> GetList(string name)
+        {
+            ResultHandler<PaginatedList<TrainerDto>> resultHandler = new ResultHandler<PaginatedList<TrainerDto>>();
+
+            try
+            {
+                IEnumerable<Trainer> trainers = _trainerRepository.FindByName(name);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Trainer>, PaginatedList<TrainerDto>>(trainers);
             }
             catch (Exception ex)
             {

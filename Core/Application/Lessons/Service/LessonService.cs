@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Application.Extensions.Paging;
 using Application.Handlers;
 using Application.Lessons.Dtos;
 using DomainModel.Lesson;
@@ -45,14 +46,14 @@ namespace Application.Lessons.Service
             return resultHandler;
         }
 
-        public ResultHandler<IEnumerable<LessonDto>> GetList()
+        public ResultHandler<PaginatedList<LessonDto>> GetList()
         {
-            ResultHandler<IEnumerable<LessonDto>> resultHandler = new ResultHandler<IEnumerable<LessonDto>>();
+            ResultHandler<PaginatedList<LessonDto>> resultHandler = new ResultHandler<PaginatedList<LessonDto>>();
 
             try
             {
                 IEnumerable<Lesson> lessons = _lessonRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
             }
             catch (Exception ex)
             {
@@ -62,14 +63,14 @@ namespace Application.Lessons.Service
             return resultHandler;
         }
 
-        public ResultHandler<IEnumerable<LessonDto>> GetByDate(DateTime dateTime)
+        public ResultHandler<PaginatedList<LessonDto>> GetByDate(DateTime dateTime)
         {
-            ResultHandler<IEnumerable<LessonDto>> resultHandler = new ResultHandler<IEnumerable<LessonDto>>();
+            ResultHandler<PaginatedList<LessonDto>> resultHandler = new ResultHandler<PaginatedList<LessonDto>>();
 
             try
             {
                 IEnumerable<Lesson> lessons = _lessonRepository.FindByDate(dateTime);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
             }
             catch (Exception ex)
             {
@@ -79,9 +80,9 @@ namespace Application.Lessons.Service
             return resultHandler;
         }
 
-        public ResultHandler<IEnumerable<LessonDto>> GetByDateAndTime(DateTime dateTime, string hour)
+        public ResultHandler<PaginatedList<LessonDto>> GetByDateAndTime(DateTime dateTime, string hour)
         {
-            ResultHandler<IEnumerable<LessonDto>> resultHandler = new ResultHandler<IEnumerable<LessonDto>>();
+            ResultHandler<PaginatedList<LessonDto>> resultHandler = new ResultHandler<PaginatedList<LessonDto>>();
 
             if (!Enum.TryParse(hour, out Hour hourParsed))
             {
@@ -92,7 +93,7 @@ namespace Application.Lessons.Service
             try
             {
                 IEnumerable<Lesson> lessons = _lessonRepository.FindByDateAndTime(dateTime, hourParsed);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, IEnumerable<LessonDto>>(lessons);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
             }
             catch (Exception ex)
             {

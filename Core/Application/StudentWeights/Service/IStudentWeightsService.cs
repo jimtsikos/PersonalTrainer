@@ -1,4 +1,5 @@
-﻿using Application.Handlers;
+﻿using Application.Extensions.Paging;
+using Application.Handlers;
 using Application.StudentWeights.Dtos;
 using System;
 using System.Collections.Generic;
@@ -18,14 +19,14 @@ namespace Application.StudentWeights.Service
         /// Get students weights
         /// </summary>
         /// <returns>The result handler object with the list of weight DTO</returns>
-        ResultHandler<IEnumerable<StudentWeightDto>> GetList();
+        ResultHandler<PaginatedList<StudentWeightDto>> GetList();
 
         /// <summary>
         /// Get a student weights by its id
         /// </summary>
         /// <param name="studentId">The student id</param>
         /// <returns>The result handler object with the list of student weight DTO</returns>
-        ResultHandler<IEnumerable<StudentWeightDto>> GetList(Guid studentId);
+        ResultHandler<PaginatedList<StudentWeightDto>> GetList(Guid studentId);
 
         /// <summary>
         /// Create a student weight

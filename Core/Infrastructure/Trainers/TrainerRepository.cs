@@ -31,5 +31,13 @@ namespace Infrastructure.Trainers
                                    .Include(x => x.Lessons)
                                    .Select(x => x);
         }
+
+        public IEnumerable<Trainer> FindByName(string name)
+        {
+            return _trainersContext.Trainers
+                                   .Include(x => x.Lessons)
+                                   .Where(x => x.FirstName.Contains(name) || x.LastName.Contains(name))
+                                   .Select(x => x);
+        }
     }
 }

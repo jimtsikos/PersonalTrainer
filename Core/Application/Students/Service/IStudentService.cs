@@ -1,7 +1,7 @@
-﻿using Application.Handlers;
+﻿using Application.Extensions.Paging;
+using Application.Handlers;
 using Application.Students.Dtos;
 using System;
-using System.Collections.Generic;
 
 namespace Application.Students.Service
 {
@@ -18,7 +18,14 @@ namespace Application.Students.Service
         /// Get studnets list
         /// </summary>
         /// <returns>The result handler object with the list of students DTO</returns>
-        ResultHandler<IEnumerable<StudentDto>> GetList();
+        ResultHandler<PaginatedList<StudentDto>> GetList();
+
+        /// <summary>
+        /// Get studnets list based on their name
+        /// </summary>
+        /// <param name="name">The student name</param>
+        /// <returns>The result handler object with a list of studnet DTO based on their name</returns>
+        ResultHandler<PaginatedList<StudentDto>> GetList(string name);
 
         /// <summary>
         /// Create a student

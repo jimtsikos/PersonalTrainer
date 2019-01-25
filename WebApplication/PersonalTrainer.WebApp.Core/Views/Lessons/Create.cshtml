@@ -22,9 +22,9 @@
                 <select asp-for="Data.TrainerId" class="form-control" asp-items="ViewBag.TrainerId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Data.DateTime" class="control-label"></label>
-                <input asp-for="Data.DateTime" class="form-control" />
-                <span asp-validation-for="Data.DateTime" class="text-danger"></span>
+                <label asp-for="Data.DateTime.ToShortDateString()" class="control-label"></label>
+                <input asp-for="Data.DateTime.ToShortDateString()" class="form-control" />
+                <span asp-validation-for="Data.DateTime.ToShortDateString()" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Data.Hour" class="control-label"></label>

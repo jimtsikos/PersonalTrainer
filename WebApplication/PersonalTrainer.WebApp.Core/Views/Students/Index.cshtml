@@ -1,4 +1,4 @@
-﻿@model ResultViewModel<IEnumerable<Application.Students.Dtos.StudentDto>>
+﻿@model ResultViewModel<Application.Extensions.Paging.PaginatedList<Application.Students.Dtos.StudentDto>>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,6 +9,15 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+
 @Html.RenderPartialAsync("_StatusMessage", Model)
 <table class="table">
     <thead>
@@ -75,6 +84,7 @@
                     @Html.DisplayFor(modelItem => item.IsActive)
                 </td>
                 <td>
+                    @Html.ActionLink("Show Weights", "Index", new { studentId = item.Id }); |
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
@@ -83,3 +93,11 @@
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.Data.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Data.HasNextPage ? "disabled" : "";
+
+    Html.ActionLink("Previous", "Index", new { page = (Model.Data.PageIndex - 1) }, new { @class = "btn btn-default " + @prevDisabled });
+    Html.ActionLink("Next", "Index", new { page = (Model.Data.PageIndex + 1) }, new { @class = "btn btn-default " + nextDisabled });
+}

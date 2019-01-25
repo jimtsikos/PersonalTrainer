@@ -1,4 +1,5 @@
-﻿using Application.Handlers;
+﻿using Application.Extensions.Paging;
+using Application.Handlers;
 using Application.Lessons.Dtos;
 using Application.Students.Dtos;
 using Application.StudentWeights.Dtos;
@@ -21,7 +22,7 @@ namespace PersonalTrainer.WebApp.Core.Areas.Mapping
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))
                     .ForMember(dest => dest.HasErrors, opt => opt.MapFrom(src => src.HasErrors));
 
-                x.CreateMap<ResultHandler<IEnumerable<TrainerDto>>, ResultViewModel<IEnumerable<TrainerDto>>>()
+                x.CreateMap<ResultHandler<PaginatedList<TrainerDto>>, ResultViewModel<PaginatedList<TrainerDto>>>()
                     .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data))
                     .ForMember(dest => dest.SuccessMessage, opt => opt.MapFrom(src => src.Message))
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))
@@ -33,7 +34,7 @@ namespace PersonalTrainer.WebApp.Core.Areas.Mapping
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))
                     .ForMember(dest => dest.HasErrors, opt => opt.MapFrom(src => src.HasErrors));
 
-                x.CreateMap<ResultHandler<IEnumerable<StudentDto>>, ResultViewModel<IEnumerable<StudentDto>>>()
+                x.CreateMap<ResultHandler<PaginatedList<StudentDto>>, ResultViewModel<PaginatedList<StudentDto>>>()
                     .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data))
                     .ForMember(dest => dest.SuccessMessage, opt => opt.MapFrom(src => src.Message))
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))
@@ -45,7 +46,7 @@ namespace PersonalTrainer.WebApp.Core.Areas.Mapping
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))
                     .ForMember(dest => dest.HasErrors, opt => opt.MapFrom(src => src.HasErrors));
 
-                x.CreateMap<ResultHandler<IEnumerable<StudentWeightDto>>, ResultViewModel<IEnumerable<StudentWeightDto>>>()
+                x.CreateMap<ResultHandler<PaginatedList<StudentWeightDto>>, ResultViewModel<PaginatedList<StudentWeightDto>>>()
                     .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data))
                     .ForMember(dest => dest.SuccessMessage, opt => opt.MapFrom(src => src.Message))
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))
@@ -57,7 +58,7 @@ namespace PersonalTrainer.WebApp.Core.Areas.Mapping
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))
                     .ForMember(dest => dest.HasErrors, opt => opt.MapFrom(src => src.HasErrors));
 
-                x.CreateMap<ResultHandler<IEnumerable<LessonDto>>, ResultViewModel<IEnumerable<LessonDto>>>()
+                x.CreateMap<ResultHandler<PaginatedList<LessonDto>>, ResultViewModel<PaginatedList<LessonDto>>>()
                     .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data))
                     .ForMember(dest => dest.SuccessMessage, opt => opt.MapFrom(src => src.Message))
                     .ForMember(dest => dest.Errors, opt => opt.MapFrom(src => src.Errors))

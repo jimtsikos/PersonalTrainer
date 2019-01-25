@@ -20,7 +20,7 @@ namespace Infrastructure.Trainers
         {
             return _trainersContext.Students
                                    .Include(x => x.Lessons)
-                                   .Include(x => x.StudentWeights)
+                                   .Include(x => x.StudentWeights.OrderByDescending(sw => sw.CreatedAt))
                                    .Select(x => x)
                                    .Where(x => x.Id == id)
                                    .FirstOrDefault();
@@ -31,6 +31,15 @@ namespace Infrastructure.Trainers
             return _trainersContext.Students
                                    .Include(x => x.Lessons)
                                    .Include(x => x.StudentWeights)
+                                   .Select(x => x);
+        }
+
+        public IEnumerable<Student> FindByName(string name)
+        {
+            return _trainersContext.Students
+                                   .Include(x => x.Lessons)
+                                   .Include(x => x.StudentWeights)
+                                   .Where(x => x.FirstName.Contains(name) || x.LastName.Contains(name))
                                    .Select(x => x);
         }
     }

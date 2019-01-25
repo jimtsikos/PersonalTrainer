@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Application.Trainers.Service;
 using Application.Trainers.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Application.Extensions.Paging;
+using PersonalTrainer.WebApp.Core.Models;
+using Application.Handlers;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -19,9 +22,27 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         }
 
         // GET: Trainers
-        public IActionResult Index()
+        public IActionResult Index(string searchString, int? page)
         {
-            return View(_trainerService.GetList());
+            ResultHandler<PaginatedList<TrainerDto>> trainers;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                trainers = _trainerService.GetList(searchString);
+            }
+            else
+            {
+                trainers = _trainerService.GetList();
+            }
+
+            page = page != null ? page : 1;
+            int pageSize = 10;
+            trainers.Data = PaginatedList<TrainerDto>.Create(trainers.Data.AsQueryable(), page ?? 1, pageSize);
+            
+            ResultViewModel<PaginatedList<TrainerDto>> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<PaginatedList<TrainerDto>>, ResultViewModel<PaginatedList<TrainerDto>>>(trainers);
+
+            return View(resultViewModel);
         }
 
         // GET: Trainers/Details/5
@@ -38,7 +59,10 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
 
-            return View(trainer);
+            ResultViewModel<TrainerDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<TrainerDto>, ResultViewModel<TrainerDto>>(trainer);
+
+            return View(resultViewModel);
         }
 
         // GET: Trainers/Create
@@ -75,7 +99,11 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
-            return View(trainer);
+
+            ResultViewModel<TrainerDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<TrainerDto>, ResultViewModel<TrainerDto>>(trainer);
+
+            return View(resultViewModel);
         }
 
         // POST: Trainers/Edit/5
@@ -85,6 +113,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id,FirstName,LastName,Description,PayRate,IsActive")] TrainerDto trainer)
         {
+            ResultHandler<TrainerDto> resultHandler = new ResultHandler<TrainerDto>();
+
             if (id != trainer.Id)
             {
                 return NotFound();
@@ -94,7 +124,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 try
                 {
-                    _trainerService.Update(trainer);
+                    resultHandler = _trainerService.Update(trainer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -109,7 +139,11 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+
+            ResultViewModel<TrainerDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<TrainerDto>, ResultViewModel<TrainerDto>>(resultHandler);
+
+            return View(resultViewModel);
         }
 
         // GET: Trainers/Delete/5
@@ -126,7 +160,10 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
 
-            return View(trainer);
+            ResultViewModel<TrainerDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<TrainerDto>, ResultViewModel<TrainerDto>>(trainer);
+
+            return View(resultViewModel);
         }
 
         // POST: Trainers/Delete/5

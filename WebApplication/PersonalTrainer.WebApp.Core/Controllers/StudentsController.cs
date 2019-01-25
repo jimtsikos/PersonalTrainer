@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using PersonalTrainer.WebApp.Core.Models;
 using System.Collections.Generic;
 using Application.Handlers;
+using Application.Extensions.Paging;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
@@ -22,12 +23,25 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         }
 
         // GET: Students
-        public IActionResult Index()
+        public IActionResult Index(string searchString, int? page)
         {
-            var students = _studentService.GetList();
+            ResultHandler<PaginatedList<StudentDto>> students;
 
-            ResultViewModel<IEnumerable<StudentDto>> studentsViewModel =
-                AutoMapper.Mapper.Map<ResultHandler<IEnumerable<StudentDto>>, ResultViewModel<IEnumerable<StudentDto>>>(students);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = _studentService.GetList(searchString);
+            }
+            else
+            {
+                students = _studentService.GetList();
+            }
+
+            page = page != null ? page : 1;
+            int pageSize = 10;
+            students.Data = PaginatedList<StudentDto>.Create(students.Data.AsQueryable(), page ?? 1, pageSize);
+
+            ResultViewModel<PaginatedList<StudentDto>> studentsViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<PaginatedList<StudentDto>>, ResultViewModel<PaginatedList<StudentDto>>>(students);
 
             return View(studentsViewModel);
         }
@@ -100,6 +114,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Id,FirstName,LastName,Description,Height,PayRate,PrepaidMoney,IsActive")] StudentDto student)
         {
+            ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
+
             if (id != student.Id)
             {
                 return NotFound();
@@ -109,7 +125,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 try
                 {
-                    _studentService.Update(student);
+                    resultHandler = _studentService.Update(student);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,7 +141,10 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
+            ResultViewModel<StudentDto> studentViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentDto>, ResultViewModel<StudentDto>>(resultHandler);
+
+            return View(studentViewModel);
         }
 
         // GET: Students/Delete/5
@@ -142,7 +161,10 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 return NotFound();
             }
 
-            return View(student);
+            ResultViewModel<StudentDto> studentViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentDto>, ResultViewModel<StudentDto>>(student);
+
+            return View(studentViewModel);
         }
 
         // POST: Students/Delete/5

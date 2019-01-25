@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Application.Extensions.Paging;
 using Application.Handlers;
 using Application.Students.Dtos;
 using DomainModel.Students;
@@ -35,14 +36,31 @@ namespace Application.Students.Service
             return resultHandler;
         }
 
-        public ResultHandler<IEnumerable<StudentDto>> GetList()
+        public ResultHandler<PaginatedList<StudentDto>> GetList()
         {
-            ResultHandler<IEnumerable<StudentDto>> resultHandler = new ResultHandler<IEnumerable<StudentDto>>();
+            ResultHandler<PaginatedList<StudentDto>> resultHandler = new ResultHandler<PaginatedList<StudentDto>>();
 
             try
             {
                 IEnumerable<Student> students = _studentRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Student>, IEnumerable<StudentDto>>(students);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Student>, PaginatedList<StudentDto>>(students);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
+        }
+
+        public ResultHandler<PaginatedList<StudentDto>> GetList(string name)
+        {
+            ResultHandler<PaginatedList<StudentDto>> resultHandler = new ResultHandler<PaginatedList<StudentDto>>();
+
+            try
+            {
+                IEnumerable<Student> students = _studentRepository.FindByName(name);
+                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Student>, PaginatedList<StudentDto>>(students);
             }
             catch (Exception ex)
             {
