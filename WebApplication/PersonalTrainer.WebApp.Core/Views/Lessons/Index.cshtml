@@ -37,10 +37,7 @@
                 @Html.DisplayNameFor(model => model.Data.FirstOrDefault().Minutes)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().IsPaid)
+                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().IsCompleted)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Data.FirstOrDefault().CreatedAt)
@@ -71,10 +68,7 @@
                     @Html.DisplayFor(modelItem => item.Minutes)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsPaid)
+                    @Html.DisplayFor(modelItem => item.IsCompleted)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatedAt)
