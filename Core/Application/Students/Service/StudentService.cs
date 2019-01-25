@@ -154,5 +154,31 @@ namespace Application.Students.Service
 
             return resultHandler;
         }
+
+        public ResultHandler<StudentDto> PayLesson(Guid studentId)
+        {
+            ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
+
+            try
+            {
+                Student student = _studentRepository.FindOne(studentId);
+                if (student == null)
+                {
+                    resultHandler.Errors.Add("No such student exists");
+                    return resultHandler;
+                }
+
+                student = student.PayLesson(student);
+                _studentRepository.Update(student);
+
+                resultHandler.Data = AutoMapper.Mapper.Map<Student, StudentDto>(student);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
+        }
     }
 }

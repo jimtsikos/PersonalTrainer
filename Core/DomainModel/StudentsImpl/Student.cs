@@ -101,5 +101,17 @@ namespace DomainModel.StudentsImpl
 
             return student;
         }
+
+        public Student PayLesson(Student student)
+        {
+            if (student == null)
+            {
+                throw new ArgumentNullException("student");
+            }
+
+            student.PrepaidMoney = student.PrepaidMoney - student.PayRate;
+
+            return student;
+        }
     }
 }

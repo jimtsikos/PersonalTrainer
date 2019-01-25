@@ -53,5 +53,12 @@ namespace Application.Students.Service
         /// <param name="studentId">The student id to be deleted</param>
         /// <returns>The result handler object with the student DTO</returns>
         ResultHandler<StudentDto> Delete(Guid studentId);
+
+        /// <summary>
+        /// Pay student's lesson
+        /// </summary>
+        /// <param name="studentId">The student id</param>
+        /// <returns>The result handler object with the student DTO</returns>
+        ResultHandler<StudentDto> PayLesson(Guid studentId);
     }
 }

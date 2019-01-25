@@ -248,6 +248,12 @@ namespace Application.Lessons.Service
 
                 lesson = _lesson.MarkAsCompleted(lesson);
                 _lessonRepository.Update(lesson);
+
+                Student student = _studentRepository.FindOne(lesson.StudentId);
+                student = student.PayLesson(student);
+                _studentRepository.Update(student);
+
+                lesson = _lessonRepository.FindOne(lessonId);
                 resultHandler.Data = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
             }
             catch (Exception ex)

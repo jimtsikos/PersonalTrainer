@@ -22,5 +22,6 @@ namespace DomainModel.Students
 
         Student Create(string firstname, string lastname, string description, double height, double payRate, double prepaidMoney, bool isActive);
         Student Update(Student student, string firstname, string lastname, string description, double height, double payRate, double prepaidMoney, bool isActive);
+        Student PayLesson(Student student);
     }
 }

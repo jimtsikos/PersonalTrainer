@@ -1,0 +1,140 @@
+﻿@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Home</h1>
+
+<div>
+    <h4>Statistics</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalTrainers)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalTrainers)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalStudents)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalStudents)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalLessons)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalLessons)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Todays Lessons</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.TodayLessons.FirstOrDefault().StudentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TodayLessons.FirstOrDefault().TrainerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TodayLessons.FirstOrDefault().Hour)
+                </th>
+                <th>
+                    Mark as completed
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lesson in Model.TodayLessons)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => lesson.StudentName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => lesson.TrainerName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => lesson.Hour)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.ActionLink("Mark as paid", "MarkAsCompleted", new { lessonId = lesson.Id });
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h4>Yesterday Lessons</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.TodayLessons.FirstOrDefault().StudentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TodayLessons.FirstOrDefault().TrainerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TodayLessons.FirstOrDefault().Hour)
+                </th>
+                <th>
+                    Money
+                </th>
+                <th>
+                    Mark as completed
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lesson in Model.YesterdayLessons)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => lesson.StudentName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => lesson.TrainerName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => lesson.Hour)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => lesson.Money)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.ActionLink("Mark as paid", "MarkAsCompleted", new { lessonId = lesson.Id });
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

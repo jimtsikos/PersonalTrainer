@@ -10,6 +10,8 @@ namespace Application.Lessons.Dtos
 
         public string StudentName { get; set; }
 
+        public double Money { get; set; }
+
         public Guid TrainerId { get; set; }
 
         public string TrainerName { get; set; }

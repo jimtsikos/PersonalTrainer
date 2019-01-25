@@ -36,7 +36,10 @@ namespace Application.Mapping
                         opt => opt.MapFrom(src => string.Format("{0} {1}", src.Student.FirstName, src.Student.LastName)))
                     .ForMember(
                         dest => dest.TrainerName,
-                        opt => opt.MapFrom(src => string.Format("{0} {1}", src.Trainer.FirstName, src.Trainer.LastName)));
+                        opt => opt.MapFrom(src => string.Format("{0} {1}", src.Trainer.FirstName, src.Trainer.LastName)))
+                    .ForMember(
+                        dest => dest.Money,
+                        opt => opt.MapFrom(src => src.Student.PrepaidMoney));
             });
         }
     }
