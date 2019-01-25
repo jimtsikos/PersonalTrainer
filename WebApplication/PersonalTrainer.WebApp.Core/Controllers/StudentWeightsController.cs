@@ -32,11 +32,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             var students = _studentService.GetList();
             ViewData["Student"] = new SelectList(students.Data, "Id", "LastName", studentId);
 
-            var studentWeights = _studentWeightsService.GetList(studentId);
-
-            page = page != null ? page : 1;
-            int pageSize = 10;
-            studentWeights.Data = PaginatedList<StudentWeightDto>.Create(studentWeights.Data.AsQueryable(), page ?? 1, pageSize);
+            Pageable pageable = new Pageable() { Page = page != null ? (int)page : 1, PageSize = 10 };
+            var studentWeights = _studentWeightsService.GetList(studentId, pageable);
 
             ResultViewModel<PaginatedList<StudentWeightDto>> resultViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<PaginatedList<StudentWeightDto>>, ResultViewModel<PaginatedList<StudentWeightDto>>>(studentWeights);

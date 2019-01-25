@@ -8,6 +8,12 @@ namespace Application.Trainers.Service
     public interface ITrainerService
     {
         /// <summary>
+        /// Get the total number of trainers
+        /// </summary>
+        /// <returns>The number of trainers</returns>
+        int Count();
+
+        /// <summary>
         /// Get a trainer by its id
         /// </summary>
         /// <param name="trainerId">The trainer id</param>
@@ -18,14 +24,14 @@ namespace Application.Trainers.Service
         /// Get a list of trainers
         /// </summary>
         /// <returns>A list of trainer DTO</returns>
-        ResultHandler<PaginatedList<TrainerDto>> GetList();
+        ResultHandler<PaginatedList<TrainerDto>> GetList(Pageable pageable = null);
 
         /// <summary>
         /// Get a list of trainers based on their name
         /// </summary>
         /// <param name="name">The trainer name</param>
         /// <returns>The result handler object with a list of trainer DTO based on their name</returns>
-        ResultHandler<PaginatedList<TrainerDto>> GetList(string name);
+        ResultHandler<PaginatedList<TrainerDto>> GetList(string name, Pageable pageable = null);
 
         /// <summary>
         /// Create a trainer

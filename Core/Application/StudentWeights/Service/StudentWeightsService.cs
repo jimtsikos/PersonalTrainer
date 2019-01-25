@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application.Extensions.Paging;
 using Application.Handlers;
 using Application.StudentWeights.Dtos;
@@ -40,14 +41,15 @@ namespace Application.StudentWeights.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<StudentWeightDto>> GetList()
+        public ResultHandler<PaginatedList<StudentWeightDto>> GetList(Pageable pageable = null)
         {
             ResultHandler<PaginatedList<StudentWeightDto>> resultHandler = new ResultHandler<PaginatedList<StudentWeightDto>>();
 
             try
             {
                 IEnumerable<StudentWeight> studentWeights = _studentWeightRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, PaginatedList<StudentWeightDto>>(studentWeights);
+                var studentWeightsPaged = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, PaginatedList<StudentWeightDto>>(studentWeights);
+                resultHandler.Data = PaginatedList<StudentWeightDto>.Create(studentWeightsPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {
@@ -57,7 +59,7 @@ namespace Application.StudentWeights.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<StudentWeightDto>> GetList(Guid studentId)
+        public ResultHandler<PaginatedList<StudentWeightDto>> GetList(Guid studentId, Pageable pageable = null)
         {
             ResultHandler<PaginatedList<StudentWeightDto>> resultHandler = new ResultHandler<PaginatedList<StudentWeightDto>>();
 
@@ -70,7 +72,8 @@ namespace Application.StudentWeights.Service
                 }
 
                 IEnumerable<StudentWeight> studentWeights = _studentWeightRepository.FindAll(student);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, PaginatedList<StudentWeightDto>>(studentWeights);
+                var studentWeightsPaged = AutoMapper.Mapper.Map<IEnumerable<StudentWeight>, PaginatedList<StudentWeightDto>>(studentWeights);
+                resultHandler.Data = PaginatedList<StudentWeightDto>.Create(studentWeightsPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {

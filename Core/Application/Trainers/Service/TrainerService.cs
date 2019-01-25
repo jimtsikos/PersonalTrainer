@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Application.Handlers;
 using Application.Extensions.Paging;
+using System.Linq;
 
 namespace Application.Trainers.Service
 {
@@ -18,6 +19,11 @@ namespace Application.Trainers.Service
         {
             _trainer = trainer;
             _trainerRepository = trainerRepository;
+        }
+
+        public int Count()
+        {
+            return _trainerRepository.Count();
         }
 
         public ResultHandler<TrainerDto> Get(Guid trainerId)
@@ -37,14 +43,15 @@ namespace Application.Trainers.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<TrainerDto>> GetList()
+        public ResultHandler<PaginatedList<TrainerDto>> GetList(Pageable pageable = null)
         {
             ResultHandler<PaginatedList<TrainerDto>> resultHandler = new ResultHandler<PaginatedList<TrainerDto>>();
 
             try
             {
                 IEnumerable<Trainer> trainers = _trainerRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Trainer>, PaginatedList<TrainerDto>>(trainers);
+                var trainersPaged = AutoMapper.Mapper.Map<IEnumerable<Trainer>, PaginatedList<TrainerDto>>(trainers);
+                resultHandler.Data = PaginatedList<TrainerDto>.Create(trainersPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {
@@ -54,14 +61,15 @@ namespace Application.Trainers.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<TrainerDto>> GetList(string name)
+        public ResultHandler<PaginatedList<TrainerDto>> GetList(string name, Pageable pageable = null)
         {
             ResultHandler<PaginatedList<TrainerDto>> resultHandler = new ResultHandler<PaginatedList<TrainerDto>>();
 
             try
             {
                 IEnumerable<Trainer> trainers = _trainerRepository.FindByName(name);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Trainer>, PaginatedList<TrainerDto>>(trainers);
+                var trainersPaged = AutoMapper.Mapper.Map<IEnumerable<Trainer>, PaginatedList<TrainerDto>>(trainers);
+                resultHandler.Data = PaginatedList<TrainerDto>.Create(trainersPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {

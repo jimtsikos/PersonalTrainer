@@ -20,11 +20,11 @@ namespace Application.Extensions.Paging
             this.AddRange(items);
         }
 
-        public static PaginatedList<T> Create(IQueryable<T> source, int pageIndex, int pageSize)
+        public static PaginatedList<T> Create(IQueryable<T> source, Pageable pageable = null)
         {
             var count = source.Count();
-            var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+            var items = pageable != null ? source.Skip((pageable.Page - 1) * pageable.PageSize).Take(pageable.PageSize).ToList() : source.ToList();
+            return new PaginatedList<T>(items, count, pageable.Page, pageable.PageSize);
         }
     }
 }

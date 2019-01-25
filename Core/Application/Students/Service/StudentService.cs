@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application.Extensions.Paging;
 using Application.Handlers;
 using Application.Students.Dtos;
@@ -19,6 +20,11 @@ namespace Application.Students.Service
             _studentRepository = studentRepository;
         }
 
+        public int Count()
+        {
+            return _studentRepository.Count();
+        }
+
         public ResultHandler<StudentDto> Get(Guid studentId)
         {
             ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
@@ -36,14 +42,15 @@ namespace Application.Students.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<StudentDto>> GetList()
+        public ResultHandler<PaginatedList<StudentDto>> GetList(Pageable pageable)
         {
             ResultHandler<PaginatedList<StudentDto>> resultHandler = new ResultHandler<PaginatedList<StudentDto>>();
 
             try
             {
                 IEnumerable<Student> students = _studentRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Student>, PaginatedList<StudentDto>>(students);
+                var studentsPaged = AutoMapper.Mapper.Map<IEnumerable<Student>, PaginatedList<StudentDto>>(students);
+                resultHandler.Data = PaginatedList<StudentDto>.Create(studentsPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {
@@ -53,14 +60,15 @@ namespace Application.Students.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<StudentDto>> GetList(string name)
+        public ResultHandler<PaginatedList<StudentDto>> GetList(string name, Pageable pageable)
         {
             ResultHandler<PaginatedList<StudentDto>> resultHandler = new ResultHandler<PaginatedList<StudentDto>>();
 
             try
             {
                 IEnumerable<Student> students = _studentRepository.FindByName(name);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Student>, PaginatedList<StudentDto>>(students);
+                var studentsPaged = AutoMapper.Mapper.Map<IEnumerable<Student>, PaginatedList<StudentDto>>(students);
+                resultHandler.Data = PaginatedList<StudentDto>.Create(studentsPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {

@@ -25,19 +25,16 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         public IActionResult Index(string searchString, int? page)
         {
             ResultHandler<PaginatedList<TrainerDto>> trainers;
+            Pageable pageable = new Pageable() { Page = page != null ? (int)page : 1, PageSize = 10 };
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                trainers = _trainerService.GetList(searchString);
+                trainers = _trainerService.GetList(searchString, pageable);
             }
             else
             {
-                trainers = _trainerService.GetList();
+                trainers = _trainerService.GetList(pageable);
             }
-
-            page = page != null ? page : 1;
-            int pageSize = 10;
-            trainers.Data = PaginatedList<TrainerDto>.Create(trainers.Data.AsQueryable(), page ?? 1, pageSize);
             
             ResultViewModel<PaginatedList<TrainerDto>> resultViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<PaginatedList<TrainerDto>>, ResultViewModel<PaginatedList<TrainerDto>>>(trainers);

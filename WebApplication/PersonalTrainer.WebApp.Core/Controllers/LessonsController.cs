@@ -41,18 +41,16 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         public IActionResult Index(string dateTime, int? page)
         {
             ResultHandler<PaginatedList<LessonDto>> lessons;
+            Pageable pageable = new Pageable() { Page = page != null ? (int)page : 1, PageSize = 10 };
+
             if (!string.IsNullOrEmpty(dateTime))
             {
-                lessons = _lessonService.GetByDate(DateTime.Parse(dateTime));
+                lessons = _lessonService.GetByDate(DateTime.Parse(dateTime), pageable);
             }
             else
             {
-                lessons = _lessonService.GetByDate(DateTime.UtcNow);
+                lessons = _lessonService.GetByDate(DateTime.UtcNow, pageable);
             }
-
-            page = page != null ? page : 1;
-            int pageSize = 10;
-            lessons.Data = PaginatedList<LessonDto>.Create(lessons.Data.AsQueryable(), page ?? 1, pageSize);
 
             ResultViewModel<PaginatedList<LessonDto>> lessonsViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<PaginatedList<LessonDto>>, ResultViewModel<PaginatedList<LessonDto>>>(lessons);

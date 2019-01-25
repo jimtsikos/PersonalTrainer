@@ -23,5 +23,6 @@ namespace DomainModel.Lesson
         LessonImpl.Lesson Create(Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid);
         LessonImpl.Lesson Update(LessonImpl.Lesson lesson, Student student, Trainer trainer, DateTime dateTime, int hour, int minutes, bool isActive, bool isPaid);
         bool HasDublicateLesson(LessonImpl.Lesson lesson, Student student, DateTime dateTime, int hour, int minutes);
+        LessonImpl.Lesson MarkAsPaid(LessonImpl.Lesson lesson);
     }
 }

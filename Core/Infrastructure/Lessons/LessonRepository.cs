@@ -41,7 +41,8 @@ namespace Infrastructure.Trainers
                                    .Include(x => x.Student)
                                    .Include(x => x.Trainer)
                                    .Select(x => x)
-                                   .Where(x => x.DateTime.Date.Day == dateTime.Date.Day);
+                                   .Where(x => x.DateTime.Date.Day == dateTime.Date.Day)
+                                   .OrderBy(x => x.Hour);
         }
 
         public IEnumerable<Lesson> FindByDateAndTime(DateTime dateTime, Hour hour)

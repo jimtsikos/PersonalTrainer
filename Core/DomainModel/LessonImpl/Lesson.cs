@@ -140,5 +140,17 @@ namespace DomainModel.LessonImpl
 
             return hasDublicateLesson;
         }
+
+        public Lesson MarkAsPaid(Lesson lesson)
+        {
+            if (lesson == null)
+            {
+                throw new ArgumentNullException("lesson");
+            }
+
+            lesson.IsPaid = true;
+
+            return lesson;
+        }
     }
 }

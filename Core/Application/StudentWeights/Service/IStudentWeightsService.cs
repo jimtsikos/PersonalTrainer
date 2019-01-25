@@ -19,14 +19,14 @@ namespace Application.StudentWeights.Service
         /// Get students weights
         /// </summary>
         /// <returns>The result handler object with the list of weight DTO</returns>
-        ResultHandler<PaginatedList<StudentWeightDto>> GetList();
+        ResultHandler<PaginatedList<StudentWeightDto>> GetList(Pageable pageable = null);
 
         /// <summary>
         /// Get a student weights by its id
         /// </summary>
         /// <param name="studentId">The student id</param>
         /// <returns>The result handler object with the list of student weight DTO</returns>
-        ResultHandler<PaginatedList<StudentWeightDto>> GetList(Guid studentId);
+        ResultHandler<PaginatedList<StudentWeightDto>> GetList(Guid studentId, Pageable pageable = null);
 
         /// <summary>
         /// Create a student weight

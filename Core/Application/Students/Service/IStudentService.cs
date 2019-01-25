@@ -8,6 +8,12 @@ namespace Application.Students.Service
     public interface IStudentService
     {
         /// <summary>
+        /// Get the total number of students
+        /// </summary>
+        /// <returns>The number of students</returns>
+        int Count();
+
+        /// <summary>
         /// Get a student by its id
         /// </summary>
         /// <param name="studentId">The student id</param>
@@ -18,14 +24,14 @@ namespace Application.Students.Service
         /// Get studnets list
         /// </summary>
         /// <returns>The result handler object with the list of students DTO</returns>
-        ResultHandler<PaginatedList<StudentDto>> GetList();
+        ResultHandler<PaginatedList<StudentDto>> GetList(Pageable pageable = null);
 
         /// <summary>
         /// Get studnets list based on their name
         /// </summary>
         /// <param name="name">The student name</param>
         /// <returns>The result handler object with a list of studnet DTO based on their name</returns>
-        ResultHandler<PaginatedList<StudentDto>> GetList(string name);
+        ResultHandler<PaginatedList<StudentDto>> GetList(string name, Pageable pageable = null);
 
         /// <summary>
         /// Create a student

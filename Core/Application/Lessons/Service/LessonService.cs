@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application.Extensions.Paging;
 using Application.Handlers;
 using Application.Lessons.Dtos;
@@ -29,6 +30,11 @@ namespace Application.Lessons.Service
             _trainerRepository = trainerRepository;
         }
 
+        public int Count()
+        {
+            return _lessonRepository.Count();
+        }
+
         public ResultHandler<LessonDto> Get(Guid lessonId)
         {
             ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
@@ -46,14 +52,15 @@ namespace Application.Lessons.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<LessonDto>> GetList()
+        public ResultHandler<PaginatedList<LessonDto>> GetList(Pageable pageable = null)
         {
             ResultHandler<PaginatedList<LessonDto>> resultHandler = new ResultHandler<PaginatedList<LessonDto>>();
 
             try
             {
                 IEnumerable<Lesson> lessons = _lessonRepository.FindAll();
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
+                var lessonsPaged = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
+                resultHandler.Data = PaginatedList<LessonDto>.Create(lessonsPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {
@@ -63,14 +70,15 @@ namespace Application.Lessons.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<LessonDto>> GetByDate(DateTime dateTime)
+        public ResultHandler<PaginatedList<LessonDto>> GetByDate(DateTime dateTime, Pageable pageable = null)
         {
             ResultHandler<PaginatedList<LessonDto>> resultHandler = new ResultHandler<PaginatedList<LessonDto>>();
 
             try
             {
                 IEnumerable<Lesson> lessons = _lessonRepository.FindByDate(dateTime);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
+                var lessonsPaged = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
+                resultHandler.Data = PaginatedList<LessonDto>.Create(lessonsPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {
@@ -80,7 +88,7 @@ namespace Application.Lessons.Service
             return resultHandler;
         }
 
-        public ResultHandler<PaginatedList<LessonDto>> GetByDateAndTime(DateTime dateTime, string hour)
+        public ResultHandler<PaginatedList<LessonDto>> GetByDateAndTime(DateTime dateTime, string hour, Pageable pageable = null)
         {
             ResultHandler<PaginatedList<LessonDto>> resultHandler = new ResultHandler<PaginatedList<LessonDto>>();
 
@@ -93,7 +101,8 @@ namespace Application.Lessons.Service
             try
             {
                 IEnumerable<Lesson> lessons = _lessonRepository.FindByDateAndTime(dateTime, hourParsed);
-                resultHandler.Data = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
+                var lessonsPaged = AutoMapper.Mapper.Map<IEnumerable<Lesson>, PaginatedList<LessonDto>>(lessons);
+                resultHandler.Data = PaginatedList<LessonDto>.Create(lessonsPaged.AsQueryable(), pageable);
             }
             catch (Exception ex)
             {
@@ -214,6 +223,31 @@ namespace Application.Lessons.Service
 
 
                 _lessonRepository.Delete(lesson);
+                resultHandler.Data = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
+            }
+            catch (Exception ex)
+            {
+                resultHandler.Errors.Add(ex.Message);
+            }
+
+            return resultHandler;
+        }
+
+        public ResultHandler<LessonDto> MarkLessonAsPaid(Guid lessonId)
+        {
+            ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
+
+            try
+            {
+                Lesson lesson = _lessonRepository.FindOne(lessonId);
+                if (lesson == null)
+                {
+                    resultHandler.Errors.Add("No such lesson exists");
+                    return resultHandler;
+                }
+
+                lesson = _lesson.MarkAsPaid(lesson);
+                _lessonRepository.Update(lesson);
                 resultHandler.Data = AutoMapper.Mapper.Map<Lesson, LessonDto>(lesson);
             }
             catch (Exception ex)
