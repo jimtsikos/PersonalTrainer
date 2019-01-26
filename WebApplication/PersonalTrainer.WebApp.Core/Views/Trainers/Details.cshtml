@@ -9,7 +9,7 @@
 <div>
     <h4>Trainer</h4>
     <hr />
-    @Html.RenderPartialAsync("_StatusMessage", Model)
+    @{ await Html.RenderPartialAsync("_StatusMessage", Model); }
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Data.FirstName)

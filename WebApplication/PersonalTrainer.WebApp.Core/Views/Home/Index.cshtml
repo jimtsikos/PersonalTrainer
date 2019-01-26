@@ -34,10 +34,9 @@
         </dd>
     </dl>
 </div>
-
+<br /><br />
 <div>
     <h4>Todays Lessons</h4>
-    <hr />
     <table class="table">
         <thead>
             <tr>
@@ -51,6 +50,9 @@
                     @Html.DisplayNameFor(model => model.TodayLessons.FirstOrDefault().Hour)
                 </th>
                 <th>
+                    Money
+                </th>
+                <th>
                     Mark as completed
                 </th>
             </tr>
@@ -58,34 +60,37 @@
         <tbody>
             @foreach (var lesson in Model.TodayLessons)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => lesson.StudentName)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => lesson.TrainerName)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => lesson.Hour)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.ActionLink("Mark as paid", "MarkAsCompleted", new { lessonId = lesson.Id });
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => lesson.StudentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => lesson.TrainerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => lesson.Hour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => lesson.Money)
+                </td>
+                <td>
+                    @if (lesson.IsCompleted)
+                    {
+                        <span>Lesson is completed</span>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Mark as completed", "MarkAsCompleted", new { lessonId = lesson.Id });
+                    }
+                </td>
+            </tr>
             }
         </tbody>
     </table>
 </div>
-
+<br /><br />
 <div>
     <h4>Yesterday Lessons</h4>
-    <hr />
     <table class="table">
         <thead>
             <tr>
@@ -113,25 +118,24 @@
                     <td>
                         @Html.DisplayFor(modelItem => lesson.StudentName)
                     </td>
-                </tr>
-                <tr>
                     <td>
                         @Html.DisplayFor(modelItem => lesson.TrainerName)
                     </td>
-                </tr>
-                <tr>
                     <td>
                         @Html.DisplayFor(modelItem => lesson.Hour)
                     </td>
-                </tr>
-                <tr>
                     <td>
                         @Html.DisplayFor(modelItem => lesson.Money)
                     </td>
-                </tr>
-                <tr>
                     <td>
-                        @Html.ActionLink("Mark as paid", "MarkAsCompleted", new { lessonId = lesson.Id });
+                        @if (lesson.IsCompleted)
+                        {
+                            <span>Lesson is completed</span>
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Mark as completed", "MarkAsCompleted", new { lessonId = lesson.Id });
+                        }
                     </td>
                 </tr>
             }

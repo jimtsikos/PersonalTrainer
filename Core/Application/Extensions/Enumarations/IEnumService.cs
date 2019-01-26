@@ -8,5 +8,7 @@ namespace Application.Extensions.Enumarations
         IEnumerable<EnumIdValue> GetHoursList();
         IEnumerable<EnumIdValue> GetMinutesList();
         string GetDescription(Enum value);
+        string GetMinutesDescription(int value);
+        string GetHoursDescription(int value);
     }
 }

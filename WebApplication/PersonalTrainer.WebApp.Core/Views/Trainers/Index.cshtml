@@ -18,7 +18,7 @@
     </p>
 }
 
-@Html.RenderPartialAsync("_StatusMessage", Model)
+@{ await Html.RenderPartialAsync("_StatusMessage", Model); }
 <table class="table">
     <thead>
         <tr>

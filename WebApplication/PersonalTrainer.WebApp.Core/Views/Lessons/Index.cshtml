@@ -12,12 +12,12 @@
 @using (Html.BeginForm())
 {
     <p>
-        Find by date: @Html.TextBoxFor(model => model.Data.FirstOrDefault().DateTime.ToShortDateString())
+        Find by date: @Html.TextBoxFor(model => model.Data.FirstOrDefault().DateTime, new { type = "date" })
         <input type="submit" value="Search" />
     </p>
 }
 
-@Html.RenderPartialAsync("_StatusMessage", Model)
+@{ await Html.RenderPartialAsync("_StatusMessage", Model); }
 <table class="table">
     <thead>
         <tr>
@@ -28,7 +28,7 @@
                 Trainer Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().DateTime.ToShortDateString())
+                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().DateTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Data.FirstOrDefault().Hour)
@@ -59,7 +59,7 @@
                     @Html.DisplayFor(modelItem => item.TrainerName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateTime.ToShortDateString())
+                    @Html.DisplayFor(modelItem => item.DateTime)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Hour)

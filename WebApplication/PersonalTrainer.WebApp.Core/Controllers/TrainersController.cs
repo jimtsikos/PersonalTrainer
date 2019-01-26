@@ -65,7 +65,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // GET: Trainers/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new ResultViewModel<TrainerDto>());
         }
 
         // POST: Trainers/Create
@@ -73,14 +73,22 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,FirstName,LastName,Description,PayRate,IsActive")] TrainerDto trainer)
+        public IActionResult Create([Bind("Id,FirstName,LastName,Description,PayRate,IsActive", Prefix = "Data")] TrainerDto trainer)
         {
+            ResultHandler<TrainerDto> resultHandler = new ResultHandler<TrainerDto>();
+
             if (ModelState.IsValid)
             {
-                _trainerService.Create(trainer);
-                return RedirectToAction(nameof(Index));
+                resultHandler = _trainerService.Create(trainer);
+                if (!resultHandler.HasErrors)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            return View();
+
+            ResultViewModel<TrainerDto> resultViewModel = 
+                AutoMapper.Mapper.Map<ResultHandler<TrainerDto>, ResultViewModel<TrainerDto>>(resultHandler);
+            return View(resultViewModel);
         }
 
         // GET: Trainers/Edit/5
@@ -108,7 +116,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("Id,FirstName,LastName,Description,PayRate,IsActive")] TrainerDto trainer)
+        public IActionResult Edit(Guid id, [Bind("Id,FirstName,LastName,Description,PayRate,IsActive", Prefix = "Data")] TrainerDto trainer)
         {
             ResultHandler<TrainerDto> resultHandler = new ResultHandler<TrainerDto>();
 

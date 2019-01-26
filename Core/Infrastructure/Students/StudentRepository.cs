@@ -20,7 +20,6 @@ namespace Infrastructure.Trainers
         {
             return _trainersContext.Students
                                    .Include(x => x.Lessons)
-                                   .Include(x => x.StudentWeights.OrderByDescending(sw => sw.CreatedAt))
                                    .Select(x => x)
                                    .Where(x => x.Id == id)
                                    .FirstOrDefault();

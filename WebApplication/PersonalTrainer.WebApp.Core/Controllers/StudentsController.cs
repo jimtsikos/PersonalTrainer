@@ -74,14 +74,23 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,FirstName,LastName,Description,Height,PayRate,PrepaidMoney,IsActive")] StudentDto student)
+        public IActionResult Create([Bind("Id,FirstName,LastName,Description,Height,PayRate,PrepaidMoney,IsActive", Prefix = "Data")] StudentDto student)
         {
+            ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
+
             if (ModelState.IsValid)
             {
-                _studentService.Create(student);
-                return RedirectToAction(nameof(Index));
+                resultHandler = _studentService.Create(student);
+                if (!resultHandler.HasErrors)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            return View();
+
+            ResultViewModel<StudentDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentDto>, ResultViewModel<StudentDto>>(resultHandler);
+
+            return View(resultViewModel);
         }
 
         // GET: Students/Edit/5
@@ -109,7 +118,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("Id,FirstName,LastName,Description,Height,PayRate,PrepaidMoney,IsActive")] StudentDto student)
+        public IActionResult Edit(Guid id, [Bind("Id,FirstName,LastName,Description,Height,PayRate,PrepaidMoney,IsActive", Prefix = "Data")] StudentDto student)
         {
             ResultHandler<StudentDto> resultHandler = new ResultHandler<StudentDto>();
 

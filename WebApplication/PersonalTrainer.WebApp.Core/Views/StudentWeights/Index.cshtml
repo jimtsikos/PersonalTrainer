@@ -7,17 +7,17 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @Html.ActionLink("Create New", "Create", new { studentId = ViewData["SelectedStudent"] })
 </p>
 
 @using (Html.BeginForm())
 {
-<p>
-    Select student: @Html.DropDownList("studentId", (SelectList)ViewData["Student"], new { onchange = "this.form.submit();" })
-</p>
+    <p>
+        Select student: @Html.DropDownList("studentId", (SelectList)ViewData["Student"], new { onchange = "this.form.submit();" })
+    </p>
 }
 
-@Html.RenderPartialAsync("_StatusMessage", Model)
+@{ await Html.RenderPartialAsync("_StatusMessage", Model); }
 <table class="table">
     <thead>
         <tr>

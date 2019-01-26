@@ -1,19 +1,22 @@
-﻿@model ResultViewModel<dynamic>
+﻿@model dynamic
 
-@if (Model.HasErrors)
+@if (Model != null)
 {
-    @foreach (var error in Model.Errors)
+    @if (Model.HasErrors)
     {
-        <div class="alert alert-danger alert-dismissible" role="alert">
+        @foreach (var error in Model.Errors)
+        {
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @error
+            </div>
+        }
+    }
+    else if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            @error
+            @Model.SuccessMessage
         </div>
     }
-}
-else
-{
-    <div class="alert alert-success alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        @Model.SuccessMessage
-    </div>
 }

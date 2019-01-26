@@ -34,5 +34,17 @@ namespace Application.Extensions.Enumarations
                     ?.GetCustomAttribute<DescriptionAttribute>()
                     ?.Description;
         }
+
+        public string GetHoursDescription(int value)
+        {
+            Enum hourEnum = (Hour)value;
+            return GetDescription(hourEnum);
+        }
+
+        public string GetMinutesDescription(int value)
+        {
+            Enum minutesEnum = (Minutes)value;
+            return GetDescription(minutesEnum);
+        }
     }
 }

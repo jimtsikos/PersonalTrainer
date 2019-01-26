@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Lessons.Dtos
 {
@@ -16,6 +18,9 @@ namespace Application.Lessons.Dtos
 
         public string TrainerName { get; set; }
 
+        [DataType(DataType.Date)]
+        [DisplayName("Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime DateTime { get; set; }
 
         public int Hour { get; set; }

@@ -8,7 +8,7 @@
 
 <h4>Trainer</h4>
 <hr />
-@Html.RenderPartialAsync("_StatusMessage", Model)
+@{ await Html.RenderPartialAsync("_StatusMessage", Model); }
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">

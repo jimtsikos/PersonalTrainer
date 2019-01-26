@@ -1,6 +1,7 @@
 ﻿using Application.Extensions.Paging;
 using Application.Handlers;
 using Application.Lessons.Dtos;
+using Application.Mapping;
 using Application.Students.Dtos;
 using Application.StudentWeights.Dtos;
 using Application.Trainers.Dtos;
@@ -16,6 +17,8 @@ namespace PersonalTrainer.WebApp.Core.Areas.Mapping
         {
             Mapper.Initialize(x =>
             {
+                x.AddProfile<Map>();
+
                 x.CreateMap<ResultHandler<TrainerDto>, ResultViewModel<TrainerDto>>()
                     .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data))
                     .ForMember(dest => dest.SuccessMessage, opt => opt.MapFrom(src => src.Message))

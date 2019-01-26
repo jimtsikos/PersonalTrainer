@@ -1,13 +1,16 @@
-﻿using Application.Lessons.Service;
+﻿using Application.Handlers;
+using Application.Lessons.Dtos;
+using Application.Lessons.Service;
 using Application.Students.Service;
 using Application.Trainers.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalTrainer.WebApp.Core.Models;
 using System;
-using System.Linq;
 
 namespace PersonalTrainer.WebApp.Core.Controllers
 {
+    [Authorize(Roles = "System Administrator,Administrator,Moderator,Trainer")]
     public class HomeController : Controller
     {
         private readonly ITrainerService _trainerService;
@@ -39,7 +42,11 @@ namespace PersonalTrainer.WebApp.Core.Controllers
 
         public IActionResult MarkAsCompleted(Guid lessonId)
         {
-            _lessonService.MarkAsCompleted(lessonId);
+            ResultHandler<LessonDto> resultHandler = _lessonService.MarkAsCompleted(lessonId);
+            if (!resultHandler.HasErrors)
+            {
+                _studentService.PayLesson(resultHandler.Data.StudentId);
+            }
             return RedirectToAction(nameof(Index));
         }
     }

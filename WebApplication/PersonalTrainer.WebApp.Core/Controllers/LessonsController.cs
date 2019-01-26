@@ -71,6 +71,9 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
+            
+            ViewData["Hours"] = _enumService.GetHoursDescription(lesson.Data.Hour);
+            ViewData["Minutes"] = _enumService.GetMinutesDescription(lesson.Data.Minutes);
 
             ResultViewModel<LessonDto> lessonViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(lesson);
@@ -93,14 +96,17 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,StudentId,TrainerId,DateTime,Hour,Minutes,IsActive,IsPaid")] LessonDto lesson)
+        public IActionResult Create([Bind("Id,StudentId,TrainerId,DateTime,Hour,Minutes,IsCompleted", Prefix = "Data")] LessonDto lesson)
         {
             ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
 
             if (ModelState.IsValid)
             {
                 resultHandler = _lessonService.Create(lesson);
-                return RedirectToAction(nameof(Index));
+                if (!resultHandler.HasErrors)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
             ViewData["TrainerId"] = new SelectList(_trainerService.GetList().Data, "Id", "LastName");
@@ -108,7 +114,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             ResultViewModel<LessonDto> lessonViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(resultHandler);
 
-            return View(resultHandler);
+            return View(lessonViewModel);
         }
 
         // GET: Lessons/Edit/5
@@ -140,7 +146,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("Id,StudentId,TrainerId,DateTime,Hour,Minutes,IsActive,IsPaid")] LessonDto lesson)
+        public IActionResult Edit(Guid id, [Bind("Id,StudentId,TrainerId,DateTime,Hour,Minutes,IsCompleted", Prefix = "Data")] LessonDto lesson)
         {
             ResultHandler<LessonDto> resultHandler = new ResultHandler<LessonDto>();
 
@@ -190,6 +196,9 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["Hours"] = _enumService.GetHoursDescription(lesson.Data.Hour);
+            ViewData["Minutes"] = _enumService.GetMinutesDescription(lesson.Data.Minutes);
 
             ResultViewModel<LessonDto> lessonViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(lesson);

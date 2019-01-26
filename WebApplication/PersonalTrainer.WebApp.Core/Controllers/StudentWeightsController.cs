@@ -29,6 +29,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // GET: StudentWeights
         public IActionResult Index(Guid studentId, int? page)
         {
+            ViewData["SelectedStudent"] = studentId;
             var students = _studentService.GetList();
             ViewData["Student"] = new SelectList(students.Data, "Id", "LastName", studentId);
 
@@ -62,9 +63,9 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         }
 
         // GET: StudentWeights/Create
-        public IActionResult Create()
+        public IActionResult Create(Guid studentId)
         {
-            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName", studentId);
             return View();
         }
 
@@ -73,17 +74,24 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,StudentId,Weight")] StudentWeightDto studentWeight)
+        public IActionResult Create([Bind("Id,StudentId,Weight", Prefix = "Data")] StudentWeightDto studentWeight)
         {
             ResultHandler<StudentWeightDto> resultHandler = new ResultHandler<StudentWeightDto>();
 
             if (ModelState.IsValid)
             {
                 resultHandler = _studentWeightsService.Create(studentWeight);
-                return RedirectToAction(nameof(Index));
+                if (!resultHandler.HasErrors)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
-            return View();
+
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName", studentWeight.StudentId);
+            ResultViewModel<StudentWeightDto> resultViewModel =
+                AutoMapper.Mapper.Map<ResultHandler<StudentWeightDto>, ResultViewModel<StudentWeightDto>>(resultHandler);
+
+            return View(resultViewModel);
         }
 
         // GET: StudentWeights/Edit/5
@@ -99,7 +107,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName", studentWeight.Data.StudentId);
 
             ResultViewModel<StudentWeightDto> resultViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<StudentWeightDto>, ResultViewModel<StudentWeightDto>>(studentWeight);
@@ -112,7 +120,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("Id,StudentId,Weight")] StudentWeightDto studentWeight)
+        public IActionResult Edit(Guid id, [Bind("Id,StudentId,Weight", Prefix = "Data")] StudentWeightDto studentWeight)
         {
             ResultHandler<StudentWeightDto> resultHandler = new ResultHandler<StudentWeightDto>();
 
@@ -140,7 +148,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName");
+            ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName", studentWeight.StudentId);
 
             ResultViewModel<StudentWeightDto> resultViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<StudentWeightDto>, ResultViewModel<StudentWeightDto>>(resultHandler);

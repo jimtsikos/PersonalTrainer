@@ -6,6 +6,7 @@ using DAL.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,7 +44,7 @@ namespace PersonalTrainer.WebApp.Core
             });
             services.AddAntiforgery();
 
-            Map mapper = new Map();
+            //Map mapper = new Map();
             ViewModelMap viewModelMap = new ViewModelMap();
 
             services.AddDbContext<TrainersContext>(
@@ -75,13 +76,19 @@ namespace PersonalTrainer.WebApp.Core
 
             app.UseStaticFiles();
             app.UseAuthentication();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             //app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Trainers}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

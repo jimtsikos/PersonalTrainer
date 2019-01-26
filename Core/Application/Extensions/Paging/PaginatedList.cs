@@ -12,19 +12,15 @@ namespace Application.Extensions.Paging
         public bool HasPreviousPage { get => PageIndex > 1; }
         public bool HasNextPage { get => PageIndex < TotalPages; }
 
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
-        {
-            PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-            this.AddRange(items);
-        }
-
         public static PaginatedList<T> Create(IQueryable<T> source, Pageable pageable = null)
         {
             var count = source.Count();
             var items = pageable != null ? source.Skip((pageable.Page - 1) * pageable.PageSize).Take(pageable.PageSize).ToList() : source.ToList();
-            return new PaginatedList<T>(items, count, pageable.Page, pageable.PageSize);
+            PaginatedList<T> list = new PaginatedList<T>();
+            list.AddRange(items);
+            list.PageIndex = pageable != null ? pageable.Page : 1;
+            list.TotalPages = pageable != null ? (int)Math.Ceiling(count / (double)pageable.PageSize) : count;
+            return list;
         }
     }
 }
