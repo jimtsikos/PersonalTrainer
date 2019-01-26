@@ -26,8 +26,15 @@
 3. PersonalTrainerWebDbInitializer.cs -> Add/Remove/Change User
 4. Program.cs -> Change the CreateWebHostBuilder method based on your needs
 5. Run the following commands on Package Manager Control
-    * Add-Migration Initial
-    * Update-Database
+    * Add-Migration Initial -Context PersonalTrainerWebContext
+    * Add-Migration Initial -Context TrainersContext
+    * Update-Database -Context PersonalTrainerWebContext
+    * Update-Database -Context TrainersContext
+6. From command line
+    * dotnet ef migrations add Initial -c PersonalTrainerWebContext
+    * dotnet ef migrations add Initial -c TrainersContext
+    * dotnet ef database update -c PersonalTrainerWebContext
+    * dotnet ef database update -c TrainersContext
 
 ## Milestones (without time)
 
