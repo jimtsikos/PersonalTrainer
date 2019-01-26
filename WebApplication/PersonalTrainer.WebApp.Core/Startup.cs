@@ -51,7 +51,7 @@ namespace PersonalTrainer.WebApp.Core
             {
                 case "MySQL":
                     services.AddDbContext<TrainersContext>(
-                        options => options.UseMySQL(
+                        options => options.UseMySql(
                             Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
                     break;
                 default:

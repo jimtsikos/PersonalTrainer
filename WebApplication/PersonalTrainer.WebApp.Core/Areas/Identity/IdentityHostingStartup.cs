@@ -20,8 +20,8 @@ namespace PersonalTrainer.WebApp.Core.Areas.Identity
                 {
                     case "MySQL":
                         services.AddDbContext<PersonalTrainerWebContext>(options =>
-                            options.UseMySQL(
-                                context.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
+                            options.UseMySql(
+                                context.Configuration.GetConnectionString("DefaultConnection"), x =>  x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
                         break;
                     default:
                         services.AddDbContext<PersonalTrainerWebContext>(options =>
