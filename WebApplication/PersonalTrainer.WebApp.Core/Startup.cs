@@ -47,9 +47,19 @@ namespace PersonalTrainer.WebApp.Core
             //Map mapper = new Map();
             ViewModelMap viewModelMap = new ViewModelMap();
 
-            services.AddDbContext<TrainersContext>(
-                options => options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
+            switch (Configuration.GetSection("DatabaseEngine").Value)
+            {
+                case "MySQL":
+                    services.AddDbContext<TrainersContext>(
+                        options => options.UseMySQL(
+                            Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
+                    break;
+                default:
+                    services.AddDbContext<TrainersContext>(
+                        options => options.UseSqlServer(
+                            Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
+                    break;
+            }
 
             ContainerBuilder builder = new ContainerBuilder();
             builder.Populate(services);
