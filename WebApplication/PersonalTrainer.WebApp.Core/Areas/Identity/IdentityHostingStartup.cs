@@ -16,9 +16,19 @@ namespace PersonalTrainer.WebApp.Core.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<PersonalTrainerWebContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
+                switch (context.Configuration.GetSection("DatabaseEngine").Value)
+                {
+                    case "MySQL":
+                        services.AddDbContext<PersonalTrainerWebContext>(options =>
+                            options.UseSqlServer(
+                                context.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
+                        break;
+                    default:
+                        services.AddDbContext<PersonalTrainerWebContext>(options =>
+                            options.UseSqlServer(
+                                context.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("PersonalTrainer.WebApp.Core")));
+                        break;
+                }
                 
                 services.AddDefaultIdentity<User>().AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<PersonalTrainerWebContext>();
