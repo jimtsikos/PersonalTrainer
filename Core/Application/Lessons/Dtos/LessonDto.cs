@@ -25,7 +25,11 @@ namespace Application.Lessons.Dtos
 
         public int Hour { get; set; }
 
+        public string HourDescription { get; set; }
+
         public int Minutes { get; set; }
+
+        public string MinutesDescription { get; set; }
 
         public bool IsCompleted { get; set; }
 

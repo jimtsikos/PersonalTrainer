@@ -71,9 +71,6 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
-            
-            ViewData["Hours"] = _enumService.GetHoursDescription(lesson.Data.Hour);
-            ViewData["Minutes"] = _enumService.GetMinutesDescription(lesson.Data.Minutes);
 
             ResultViewModel<LessonDto> lessonViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(lesson);
@@ -196,9 +193,6 @@ namespace PersonalTrainer.WebApp.Core.Controllers
             {
                 return NotFound();
             }
-
-            ViewData["Hours"] = _enumService.GetHoursDescription(lesson.Data.Hour);
-            ViewData["Minutes"] = _enumService.GetMinutesDescription(lesson.Data.Minutes);
 
             ResultViewModel<LessonDto> lessonViewModel =
                 AutoMapper.Mapper.Map<ResultHandler<LessonDto>, ResultViewModel<LessonDto>>(lesson);
