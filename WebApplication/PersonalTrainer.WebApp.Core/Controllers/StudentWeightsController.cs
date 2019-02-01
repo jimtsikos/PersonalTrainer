@@ -83,7 +83,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                 resultHandler = _studentWeightsService.Create(studentWeight);
                 if (!resultHandler.HasErrors)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { studentId = studentWeight.StudentId });
                 }
             }
 
@@ -146,7 +146,7 @@ namespace PersonalTrainer.WebApp.Core.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { studentId = studentWeight.StudentId });
             }
             ViewData["StudentId"] = new SelectList(_studentService.GetList().Data, "Id", "LastName", studentWeight.StudentId);
 
@@ -181,8 +181,8 @@ namespace PersonalTrainer.WebApp.Core.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            _studentWeightsService.Delete(id);
-            return RedirectToAction(nameof(Index));
+            ResultHandler<StudentWeightDto> resultHandler = _studentWeightsService.Delete(id);
+            return RedirectToAction(nameof(Index), new { studentId = resultHandler.Data.StudentId });
         }
 
         private bool StudentWeightExists(Guid id)

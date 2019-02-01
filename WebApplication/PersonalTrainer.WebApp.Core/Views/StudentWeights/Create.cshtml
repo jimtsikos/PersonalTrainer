@@ -30,7 +30,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Back to List", "Index", new { studentId = ViewBag.StudentId })
 </div>
 
 @section Scripts {
